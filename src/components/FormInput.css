@@ -1,0 +1,40 @@
+.formInput{
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+ 
+ 
+input{
+    padding: 15px;
+    margin: 10px 0px;
+    border-radius: 10px;
+    background-color: rgb(201,201,201,50%);
+    font-weight: bold;
+    /* color: aliceblue; */
+}
+ 
+label{
+    font-size: 20px;
+    color: aliceblue;
+}
+ 
+span{
+    font-size: 15px;
+    padding: 3px;
+    color: rgb(244, 71, 71);
+    display: none;
+}
+ 
+ 
+input:invalid[focused="true"] {
+    border: 1px solid rgb(244, 71, 71);
+}
+ 
+input:invalid[focused="true"] ~ span{
+    display: block;
+}
+ 
+.terms{
+    font-size: 12px;
+}
