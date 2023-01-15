@@ -1,20 +1,11 @@
-
-import './App.css';
-import{
-  Routes,
-  Route,
-} from "react-router-dom";
-
-import Reg from "./components/Reg";
-import LogInS from './components/LogInS';
+import './index.css';
+import LoginPage from './components/LoginPage';
 
 function App() {
   return (
-    <Routes>
-      {/* this page will be displyed */}
-      <Route path='/' element={<LogInS/>}/> 
-      <Route path='/Reg' element={<Reg/>}/> 
-    </Routes>
+    <div>
+      <LoginPage />
+    </div>
   );
 }
 
