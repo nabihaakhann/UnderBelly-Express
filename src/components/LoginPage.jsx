@@ -7,8 +7,8 @@ export default function LoginPage(){
     const [showLoginForm, setShowLoginForm] = useState(true); 
 
     return(
-       <div id='login-page'>
-            {showLoginForm ? <LoginForm /> : <RegistrationForm />}
-       </div>
+      <div id='login-page'>
+        <LoginForm />
+      </div>
     )
 }

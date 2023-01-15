@@ -1,43 +1,42 @@
 import '../index.css';
+import {Colors, Button, Divider, Input}  from '../ui/ui';
 
-import {Card, FormControlLabel, Checkbox} from '@mui/material';
+import {FormControlLabel, Checkbox} from '@mui/material';
 
 export default function LoginForm(){
     // Styling objects
-    const cardStyle = {
-        backgroundColor: 'rgba(126, 113, 113, 0.31)', 
-        color: '#fff',
-        marginTop: '20rem', 
-        padding: '2rem 5rem', 
-        display: 'flex',
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        width: '40rem'
-    }, 
-    checkboxStyle = {
-        width: '100%', 
+    const checkboxStyle = {
+        width: '80%', 
         display: 'flex', 
         justifyContent: 'space-between', 
-        margin: '2rem'
+        margin: '2rem', 
+        fontSize: '1.2rem'
     }
 
     return (
-       <Card variant='outlined' sx={cardStyle}>
-            <p className='login-page-title'>Welcome Back</p>
-            <div className='divider'></div>
+       <div className='form-wrapper card'>
+            <p className='heading'>Welcome Back</p>
+            <Divider width='28%' />
             <div style={checkboxStyle}>
-                <FormControlLabel control={<Checkbox />} label='Admin' />
-                <FormControlLabel control={<Checkbox defaultChecked/>} label='Student' />
+                {/* <div>
+                    <input type='checkbox' id='admin-checkbox' className='input-checkbox'></input>
+                    <label for='admin-checkbox'>Admin</label>
+                </div>
+                <div>
+                    <input type='checkbox' id='student-checkbox'></input>
+                        <label for='student-checkbox'>Student</label>
+                </div> */}
+                <FormControlLabel control={<Checkbox />} label='Admin' sx={{color: '#fff'}} />
+                <FormControlLabel control={<Checkbox defaultChecked/>} label='Student' color='danger'/>
             </div>
-            <div style={{width: '100%'}}>
-                <label for='textInput' className='label'>Registration Number</label>
-                <input type='text' className='input' placeholder='Enter your username' id='textInput' />   
-            </div>
-            <div style={{width: '100%'}}>
-                <label for='password'>Password</label>
-                <input type='password' className='input' placeholder='Enter your password' id='password' />
-            </div>
-       </Card>
+
+            <Input labelText='Registration Number' placeholder='Enter your username' type='text' />
+            <Input labelText='Password' placeholder='Enter your password' type= 'password' />
+
+            <p style={{alignSelf: 'end', marginBottom: '1rem'}}>Forgot Password?</p>
+            <Button color={Colors.primaryColor} hoverColor={Colors.primaryColorDark} >Login</Button>
+            <p style={{fontWeight: 200, marginBottom: '5rem'}}>New to UB EXPRESS? <strong>Register</strong> Here</p>
+       </div>
     )
 }
 
