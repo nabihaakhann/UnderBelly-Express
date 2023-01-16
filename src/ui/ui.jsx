@@ -18,7 +18,7 @@ export function Divider({width}){
     return (<div style={style}></div>)
 }
 
-export function Button({color, hoverColor, children}){
+export function Button({color, hoverColor, children, onButtonPress}){
     const [isHover, setHover] = useState(false);
 
     const styles = {
@@ -40,18 +40,36 @@ export function Button({color, hoverColor, children}){
     }
 
     return (
-        <div style={styles.buttonWrapper} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)}>
+        <div style={styles.buttonWrapper} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)} onClick={onButtonPress}>
             <p style={styles.text}>{children}</p>
         </div>
     )
 }
 
-export function Input({labelText, placeholder, type}){
+export function Input({labelText, placeholder, type, name, value, handleChange}){
     return(
         <div style={{width: '100%',  marginBottom: '2rem'}}>
             <label className='input-label'>{labelText}</label>
-            <input type={type}  placeholder={placeholder} />   
+            <input 
+                type={type}  
+                placeholder={placeholder} 
+                name={name} 
+                value={value} 
+                onChange={event => handleChange(name, event.target.value)} />   
         </div>
+    )
+}
+
+export function HighlightedText({children}){
+    const [isHover, setHover] = useState(false);
+
+    const style={
+        color: isHover ? Colors.primaryColor : 'white', 
+        cursor: 'pointer'
+    }
+
+    return (
+        <span style={style} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)}> {children} </span>
     )
 }
 

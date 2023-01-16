@@ -1,11 +1,47 @@
 import '../index.css';
-import {Colors, Button, Divider, Input}  from '../ui/ui';
+import {
+    Colors, 
+    Button, 
+    Divider, 
+    Input, 
+    HighlightedText
+}  from '../ui/ui';
 
-import {FormControlLabel, Checkbox} from '@mui/material';
+import { useState } from 'react';
 
-export default function LoginForm(){
+export default function LoginForm({register}){
+    const [loginFormData, setLoginFormData] = useState({
+        email: '', 
+        password: '', 
+        user: 'student'
+    })
+
+    function setFormData(name, value){
+        setLoginFormData(prevData => {
+            return {
+                ...prevData, 
+                [name]: value
+            }
+        })
+    }
+
+    function addCheckboxValue(id){
+        if(id.indexOf('admin') !== -1){
+            setLoginFormData(prevData => {
+                return {
+                    ...prevData, 
+                    user: 'admin'
+                }
+            })
+        }
+    }
+
+    function onSubmitLoginForm(){
+        console.table(loginFormData);
+    }
+
     // Styling objects
-    const checkboxStyle = {
+    const checkboxWrapper = {
         width: '80%', 
         display: 'flex', 
         justifyContent: 'space-between', 
@@ -17,25 +53,49 @@ export default function LoginForm(){
        <div className='form-wrapper card'>
             <p className='heading'>Welcome Back</p>
             <Divider width='28%' />
-            <div style={checkboxStyle}>
-                {/* <div>
-                    <input type='checkbox' id='admin-checkbox' className='input-checkbox'></input>
-                    <label for='admin-checkbox'>Admin</label>
+            <div style={checkboxWrapper}>
+                {/* Make elements radio instead of checkbox */}
+                <div>
+                    <input type='checkbox' id='admin-checkbox' className='input-checkbox' onClick={event => addCheckboxValue(event.target.id)}/>
+                    <label for='admin-checkbox' style={{fontWeight: '200'}}>Admin</label>
                 </div>
                 <div>
-                    <input type='checkbox' id='student-checkbox'></input>
-                        <label for='student-checkbox'>Student</label>
-                </div> */}
-                <FormControlLabel control={<Checkbox />} label='Admin' sx={{color: '#fff'}} />
-                <FormControlLabel control={<Checkbox defaultChecked/>} label='Student' color='danger'/>
+                    <input type='checkbox' id='student-checkbox' className='input-checkbox' checked onClick={event => addCheckboxValue(event.target.id)}/>
+                    <label for='student-checkbox' style={{fontWeight: '200'}}>Student</label>
+                </div>
             </div>
 
-            <Input labelText='Registration Number' placeholder='Enter your username' type='text' />
-            <Input labelText='Password' placeholder='Enter your password' type= 'password' />
+            <Input 
+                labelText='Registration Number' 
+                placeholder='Enter your username' 
+                type='email' 
+                name='email'
+                value={loginFormData.email}
+                handleChange={setFormData}
+            />
+            <Input 
+                labelText='Password' 
+                placeholder='Enter your password' 
+                type= 'password' 
+                name='password'
+                value={loginFormData.password}
+                handleChange={setFormData}
+            />
 
             <p style={{alignSelf: 'end', marginBottom: '1rem'}}>Forgot Password?</p>
-            <Button color={Colors.primaryColor} hoverColor={Colors.primaryColorDark} >Login</Button>
-            <p style={{fontWeight: 200, marginBottom: '5rem'}}>New to UB EXPRESS? <strong>Register</strong> Here</p>
+
+            <Button 
+                color={Colors.primaryColor} 
+                hoverColor={Colors.primaryColorDark} 
+                onButtonPress={onSubmitLoginForm}
+                > Login </Button>
+            
+            <p style={{fontWeight: 200, marginBottom: '5rem'}}>
+                New to UB EXPRESS? 
+                <strong onClick={register}> 
+                    <HighlightedText>Register</HighlightedText>
+                </strong> Here
+            </p>
        </div>
     )
 }

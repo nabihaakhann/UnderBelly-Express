@@ -6,9 +6,13 @@ import RegistrationForm from './RegistrationForm';
 export default function LoginPage(){
     const [showLoginForm, setShowLoginForm] = useState(true); 
 
+    function showRegistrationForm(){
+        setShowLoginForm(false);
+    }
+
     return(
       <div id='login-page'>
-        <LoginForm />
+        {showLoginForm ? <LoginForm register={showRegistrationForm} /> : <RegistrationForm />}
       </div>
     )
 }
