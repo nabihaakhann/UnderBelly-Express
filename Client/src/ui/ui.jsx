@@ -6,7 +6,7 @@ const Colors = {
     primaryColorDark: '#cd8152'
 }
 
-// Width will is in percentages
+// Width is in percentages
 export function Divider({width}){
     const style = {
         width: width,
@@ -70,6 +70,21 @@ export function HighlightedText({children}){
 
     return (
         <span style={style} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)}> {children} </span>
+    )
+}
+
+export function MessageBox({children, backgroundColor}){
+    const messageBoxStyle = {
+        backgroundColor: backgroundColor? backgroundColor : Colors.primaryColor, 
+        color: 'black', 
+        padding: '1rem', 
+        borderRadius: '5px'
+    }
+
+    return(
+        <div style={messageBoxStyle}>
+            <p> {children} </p>
+        </div>
     )
 }
 
