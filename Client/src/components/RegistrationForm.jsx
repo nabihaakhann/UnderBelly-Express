@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {Input, Button, Colors, MessageBox} from '../ui/ui';
 
 export default function RegistrationForm(){
     // Form Handling
-    const [registraionFormData, setRegistrationFormData] = useState({
+    const [registrationFormData, setRegistrationFormData] = useState({
         email: '', 
         registrationNumber: '', 
         password: '', 
@@ -47,16 +47,16 @@ export default function RegistrationForm(){
     }
 
     function onSubmitRegistrationForm(){
-        console.table(registraionFormData);
+        console.table(registrationFormData);
 
         // Registration Form Validation 
         const emailValidation = /@vitbhopal.ac.in$/
         let message = 'Account Successfully created!';
 
-        const   validPassword = registraionFormData.password.length !== 0,
-                samePassword = registraionFormData.password === registraionFormData.confirmPassword,
-                validEmail = emailValidation.test(registraionFormData.email), 
-                validRegistrationNumber = checkRegistrationNumber(registraionFormData.registrationNumber);
+        const   validPassword = registrationFormData.password.length !== 0,
+                samePassword = registrationFormData.password === registrationFormData.confirmPassword,
+                validEmail = emailValidation.test(registrationFormData.email), 
+                validRegistrationNumber = checkRegistrationNumber(registrationFormData.registrationNumber);
 
         if(!validPassword){
             message = 'Entered Password is Invalid';
@@ -71,11 +71,26 @@ export default function RegistrationForm(){
             message = 'Entered Registration Number is incorrect';
         }
 
-        // Show & Clear message box
-        setMessageBox({
-            display: true, 
-            text: message
-        })
+        if(message.indexOf('Successfully') !== -1){
+           fetch('/register', {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(registrationFormData)
+           })
+           .then(response => response.json())
+           .then(response => {
+                console.log(response);
+           })
+
+        }
+        else{
+            setMessageBox({
+                display: true, 
+                text: message
+            })
+        }
+
+        // Remove Message Box
         setTimeout(()=>{
             clearMessageBox();
         }, 3000);
@@ -99,7 +114,7 @@ export default function RegistrationForm(){
                     placeholder='Enter your email address' 
                     type='email' 
                     name='email'
-                    value={registraionFormData.email}
+                    value={registrationFormData.email}
                     handleChange={setFormData}
                 />        
                 <Input 
@@ -107,21 +122,21 @@ export default function RegistrationForm(){
                     placeholder='Enter your registration number' 
                     type='text' 
                     name='registrationNumber'
-                    value={registraionFormData.registrationNumber}
+                    value={registrationFormData.registrationNumber}
                     handleChange={setFormData}
                 />        
                 <Input 
                     labelText='Create Password'  
                     type='password' 
                     name='password'
-                    value={registraionFormData.password}
+                    value={registrationFormData.password}
                     handleChange={setFormData}
                 />        
                 <Input 
                     labelText='Confirm Password' 
                     type='password' 
                     name='confirmPassword'
-                    value={registraionFormData.confirmPassword}
+                    value={registrationFormData.confirmPassword}
                     handleChange={setFormData}
                 />     
 
