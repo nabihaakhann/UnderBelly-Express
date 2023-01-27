@@ -1,6 +1,6 @@
 import './index.css';
 import LoginPage from './components/LoginPage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   // // Testing if the server is accepting any requests or not
@@ -11,9 +11,9 @@ function App() {
   // }, []);
 
   return (
-    <div>
+    <>
       <LoginPage />
-    </div>
+    </>
   );
 }
 

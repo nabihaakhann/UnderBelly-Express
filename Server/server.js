@@ -1,3 +1,5 @@
+const { response } = require('express');
+
 require('dotenv').config();
 const   express = require('express'), 
         app = express(), 
@@ -29,29 +31,66 @@ const User = mongoose.model('User', {
 // POST REQUESTS
 app.post('/register', (req, res)=>{
     console.log(req.body);
+    let responseMessage = '';
 
-    // Using Bcrypt to make Hash
-    bcrypt.hash(req.body.password, saltRounds, (err, hash)=>{
+    // Check if account already exists or not
+    User.findOne({email: req.body.email}, (err, foundUser)=>{
         if(!err){
-            console.log('Hash generated for ' + req.body.password + ' : ' + hash);
+            if(!foundUser){
+                responseMessage = 'Account Successfully Created!';
 
-            // Saving user details to DB
-            const newUser = new User({
-                email: req.body.email, 
-                password: hash, 
-                contactNumber: '',
-                address: '', 
-                userImage: null
-            })
+                // Using Bcrypt for creating a unique hash
+                const hash = bcrypt.hashSync(req.body.password, saltRounds);
+                console.log('Hash generated for ' + req.body.password + ' : ' + hash);
 
-            newUser.save(err => {
-                if(!err){
-                    console.log('User Details successfully saved to DB');
-                    res.json({text: 'saved'});
-                }
-            });
+                // Saving user details to DB
+                const newUser = new User({
+                    email: req.body.email, 
+                    password: hash, 
+                    contactNumber: null,
+                    address: null, 
+                    userImage: null
+                })
+
+                newUser.save(err => {
+                    if(!err){
+                        console.log('User Details successfully saved to DB');
+                    }
+                });
+            }
+            else{
+                responseMessage = 'Account already Exists!';
+            }
+
+            res.json({responseMessage: responseMessage});
         }
     })
+})
+
+app.post('/login', (req, res)=>{
+    let responseMessage = '';
+
+    // Check if account exists
+    User.findOne({email: req.body.email}, async (err, foundUser)=>{
+        if(!err){
+            if(foundUser){
+                // Check for password
+                const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+                if(match){
+                    responseMessage = 'Login Successfull!';
+                }
+                else{
+                    responseMessage = 'Password Incorrect';
+                }
+            }
+            else{
+                responseMessage = 'No Such Account Found';
+            }
+
+            res.json({responseMessage: responseMessage});
+        }
+    }) 
 })
 
 app.listen(5000, ()=>{

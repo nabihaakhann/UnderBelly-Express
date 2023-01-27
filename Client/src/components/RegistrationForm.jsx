@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import {Input, Button, Colors, MessageBox} from '../ui/ui';
 
-export default function RegistrationForm(){
+export default function RegistrationForm({showOutput, clearOutput, setOutput}){
     // Form Handling
     const [registrationFormData, setRegistrationFormData] = useState({
         email: '', 
@@ -10,19 +10,6 @@ export default function RegistrationForm(){
         password: '', 
         confirmPassword: ''
     })
-
-    //Show Message/Alert Box
-    const [showMessageBox, setMessageBox] = useState({
-        text: '', 
-        display: false
-    }); 
-
-    function clearMessageBox(){
-        setMessageBox({
-            text: '', 
-            display: false
-        })
-    }
 
     function setFormData(name, value){
         setRegistrationFormData(prevData => {
@@ -79,21 +66,16 @@ export default function RegistrationForm(){
            })
            .then(response => response.json())
            .then(response => {
-                console.log(response);
+                setOutput(response.responseMessage);
            })
 
         }
         else{
-            setMessageBox({
-                display: true, 
-                text: message
-            })
+            setOutput(message);
         }
 
         // Remove Message Box
-        setTimeout(()=>{
-            clearMessageBox();
-        }, 3000);
+        clearOutput();
     }
 
     const divStyle = {
@@ -106,7 +88,7 @@ export default function RegistrationForm(){
 
     return (
         <div style={divStyle}>
-            {showMessageBox.display && <MessageBox>{showMessageBox.text}</MessageBox>}
+            {showOutput.display && <MessageBox>{showOutput.text}</MessageBox>}
 
             <div className="form-wrapper card" style={{paddingBottom: '5rem'}}>
                 <Input 
