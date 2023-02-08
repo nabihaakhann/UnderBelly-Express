@@ -1,4 +1,4 @@
-import '../index.css';
+import '../../index.css';
 import {
     Colors, 
     Button, 
@@ -6,9 +6,10 @@ import {
     Input, 
     HighlightedText, 
     MessageBox
-}  from '../ui/ui';
+}  from '../../ui/ui';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm({register, setOutput, clearOutput, showOutput}){
     const [loginFormData, setLoginFormData] = useState({
@@ -16,6 +17,9 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
         password: '', 
         user: 'student'
     })
+
+    // For Redirecting to another url
+    const navigate = useNavigate();
 
     function setFormData(name, value){
         setLoginFormData(prevData => {
@@ -50,8 +54,12 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
             console.log(response);
             setOutput(response.responseMessage);
             clearOutput();
+
+            if(response.success){
+                navigate(`/${response.userId}/home`);
+            }
         })
-    }
+    } 
 
     // Styling objects
     const checkboxWrapper = {

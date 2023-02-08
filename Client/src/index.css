@@ -16,6 +16,10 @@ html{
   width: 100%;
   position: relative;
 }
+
+body{
+  color: white;
+}
 /* body:before{
   content: ''; 
   position: absolute;
@@ -82,4 +86,18 @@ input:focus{
   width: 40rem;
   padding: 2rem 5rem;
   margin-top: 2rem;
+}
+
+/* Error Page */
+#error-page{
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  height: 100%;
+  width: 100%;
 }

@@ -7,8 +7,12 @@ export default function LoginPage(){
   // Show Login & Registration Form
   const [showLoginForm, setShowLoginForm] = useState(true); 
 
-  function showRegistrationForm(){
+  function displayRegistrationForm(){
     setShowLoginForm(false);
+  }
+
+  function displayLoginForm(){
+    setShowLoginForm(true);
   }
 
   //Show Message/Alert Box
@@ -37,7 +41,7 @@ export default function LoginPage(){
     <div id='login-page'>
       {showLoginForm ? 
         <LoginForm 
-          register={showRegistrationForm} 
+          register={displayRegistrationForm} 
           showOutput={showMessageBox} 
           clearOutput={clearMessageBox}
           setOutput={displayMessageBox}
@@ -46,6 +50,7 @@ export default function LoginPage(){
           showOutput={showMessageBox}
           clearOutput={clearMessageBox}
           setOutput={displayMessageBox}
+          login={displayLoginForm}
         />}
     </div>
   )

@@ -1,6 +1,8 @@
 import './index.css';
-import LoginPage from './components/LoginPage';
-import { useEffect, useState } from 'react';
+import LoginPage from './components/LoginPage/LoginPage';
+import ErrorPage from './components/ErrorPage';
+
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 function App() {
   // // Testing if the server is accepting any requests or not
@@ -9,11 +11,20 @@ function App() {
   //   .then(response => response.text())
   //   .then(text => console.log(text))
   // }, []);
+  const router = createBrowserRouter([
+    {
+      path: '/', 
+      element: <LoginPage />, 
+      
+    }, 
+    {
+      path: '/:userId/home',
+      element: <div>This is the Home Page!</div>,
+    }
+  ])  
 
   return (
-    <>
-      <LoginPage />
-    </>
+    <RouterProvider router={router} errorElement={<div>This is the error Page</div>}/>
   );
 }
 

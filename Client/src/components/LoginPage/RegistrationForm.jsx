@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import {Input, Button, Colors, MessageBox} from '../ui/ui';
+import {Input, Button, Colors, MessageBox, HighlightedText} from '../../ui/ui';
 
-export default function RegistrationForm({showOutput, clearOutput, setOutput}){
+export default function RegistrationForm({showOutput, clearOutput, setOutput, login}){
     // Form Handling
     const [registrationFormData, setRegistrationFormData] = useState({
         email: '', 
@@ -29,7 +29,6 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput}){
         if(number.length === 10 && testOne && testTwo){
             return true;
         }
-
         return false;
     }
 
@@ -133,6 +132,13 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput}){
                     hoverColor={Colors.primaryColorDark} 
                     onButtonPress={onSubmitRegistrationForm}
                 > Register </Button>
+            
+                <div>
+                    <p>
+                        Already have an account? 
+                        <HighlightedText><strong onClick={login}>Log In</strong></HighlightedText>
+                    </p>
+                </div>
             </div>
         </div>
     )

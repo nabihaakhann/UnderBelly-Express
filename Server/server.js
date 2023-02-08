@@ -68,7 +68,11 @@ app.post('/register', (req, res)=>{
 })
 
 app.post('/login', (req, res)=>{
-    let responseMessage = '';
+    let response = {
+        responseMessage: '', 
+        success: false, 
+        userId: ''
+    };
 
     // Check if account exists
     User.findOne({email: req.body.email}, async (err, foundUser)=>{
@@ -78,17 +82,19 @@ app.post('/login', (req, res)=>{
                 const match = await bcrypt.compare(req.body.password, foundUser.password);
 
                 if(match){
-                    responseMessage = 'Login Successfull!';
+                    response.responseMessage = 'Login Successfull!';
+                    response.success = true;
+                    response.userId = foundUser._id;
                 }
                 else{
-                    responseMessage = 'Password Incorrect';
+                    response.responseMessage = 'Password Incorrect';
                 }
             }
             else{
-                responseMessage = 'No Such Account Found';
+                response.responseMessage = 'No Such Account Found';
             }
 
-            res.json({responseMessage: responseMessage});
+            res.json(response);
         }
     }) 
 })
