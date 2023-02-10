@@ -88,6 +88,25 @@ export function MessageBox({children, backgroundColor}){
     )
 }
 
+export function Heading({children}){
+    return (
+        <p className='heading'> {children} </p>
+    )
+}
+
+export function ImageBox({title, borderColor, imageURL}){
+    const boxStyle= { 
+        background: `url(${imageURL}) no-repeat center center/cover`, 
+        borderColor: borderColor? borderColor: 'white', 
+    }
+    
+    return (
+        <div style={boxStyle} className='image-box'>
+            <p> {title} </p>
+        </div>
+    )
+}
+
 export {
     Colors
 }

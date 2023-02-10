@@ -1,5 +1,6 @@
 import './index.css';
 import LoginPage from './components/LoginPage/LoginPage';
+import HomePage from './components/HomePage';
 import ErrorPage from './components/ErrorPage';
 
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
@@ -19,7 +20,7 @@ function App() {
     }, 
     {
       path: '/:userId/home',
-      element: <div>This is the Home Page!</div>,
+      element: <HomePage />,
     }
   ])  
 
