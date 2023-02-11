@@ -34,7 +34,7 @@ code {
 }
 
 .card{
-  background: rgba(126, 113, 113, 0.31);
+  background: rgba(126, 113, 113, 0.45);
   backdrop-filter: blur(2px);
   padding: 1.5rem;
   color: #fff;

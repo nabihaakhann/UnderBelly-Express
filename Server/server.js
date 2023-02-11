@@ -25,7 +25,8 @@ const User = mongoose.model('User', {
     password: String, 
     contactNumber: Number, 
     address: String, 
-    userImage: Buffer
+    userImage: Buffer, 
+    userLevel: String
 })
 
 // POST REQUESTS
@@ -49,7 +50,8 @@ app.post('/register', (req, res)=>{
                     password: hash, 
                     contactNumber: null,
                     address: null, 
-                    userImage: null
+                    userImage: null, 
+                    userLevel: 'student'
                 })
 
                 newUser.save(err => {
@@ -75,7 +77,7 @@ app.post('/login', (req, res)=>{
     };
 
     // Check if account exists
-    User.findOne({email: req.body.email}, async (err, foundUser)=>{
+    User.findOne({email: req.body.email}, {password: 1}, async (err, foundUser)=>{
         if(!err){
             if(foundUser){
                 // Check for password
@@ -98,6 +100,41 @@ app.post('/login', (req, res)=>{
         }
     }) 
 })
+
+app.post('/login/admin', (req, res)=>{
+    let response = {
+        responseMessage: '', 
+        success: false, 
+        userId: ''
+    }
+    User.findOne({email: req.body.email}, {password: 1, userLevel: 1},async (err, foundUser)=>{
+        if(!err){
+            if(foundUser){
+                if(foundUser.userLevel === 'admin'){
+                    const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+                    if(match){
+                        response.responseMessage = 'Login Successfull!';
+                        response.success = true;
+                        response.userId = foundUser._id;
+                    }
+                    else{
+                        response.responseMessage = "Password Incorrect";
+                    }
+                }
+                else{
+                    response.responseMessage = "Account doesn't have Admin Level Privileges";
+                }
+            }
+            else{
+                response.responseMessage = 'No Such Account Found';
+            }
+
+            res.json(response);
+        }
+    })
+})
+
 
 app.listen(5000, ()=>{
     console.log('The Server is running on port 5000');

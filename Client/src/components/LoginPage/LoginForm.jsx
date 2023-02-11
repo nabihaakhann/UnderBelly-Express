@@ -10,13 +10,14 @@ import {
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {Radio} from '@mui/material';
 
 export default function LoginForm({register, setOutput, clearOutput, showOutput}){
     const [loginFormData, setLoginFormData] = useState({
         email: '', 
         password: '', 
-        user: 'student'
     })
+    const [selectedUserLevel, setSelectedUserLevel] = useState('student');
 
     // For Redirecting to another url
     const navigate = useNavigate();
@@ -30,35 +31,51 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
         })
     }
 
-    function addCheckboxValue(id){
-        if(id.indexOf('admin') !== -1){
-            setLoginFormData(prevData => {
-                return {
-                    ...prevData, 
-                    user: 'admin'
-                }
-            })
-        }
-    }
-
     function onSubmitLoginForm(){
         console.table(loginFormData);
+        console.log('User level selected: ' + selectedUserLevel);
 
-        fetch('/login', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify(loginFormData)
-        })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            setOutput(response.responseMessage);
-            clearOutput();
-
-            if(response.success){
-                navigate(`/${response.userId}/home`);
+        if(loginFormData.email.length !== 0 && loginFormData.password.length !== 0){
+            if(selectedUserLevel === 'student'){
+                fetch('/login', {
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(loginFormData)
+                })
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response);
+                    setOutput(response.responseMessage);
+                    clearOutput();
+        
+                    if(response.success){
+                        navigate(`/${response.userId}/home`);
+                    }
+                })
             }
-        })
+            else{
+                fetch('/login/admin', {
+                    method: 'POST', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify(loginFormData)
+                })
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response);
+                    setOutput(response.responseMessage);
+                    clearOutput();
+
+                    if(response.success){
+                        navigate(`/${response.userId}/admin`)
+                    }
+                })
+            }
+        }
+        else{
+            setOutput('Blank Email or Password Detected');
+            clearOutput();
+        }
+
     } 
 
     // Styling objects
@@ -86,20 +103,35 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                 <Divider width='28%' />
 
                 <div style={checkboxWrapper}>
-                    {/* Make elements radio instead of checkbox */}
                     <div>
-                        <input type='checkbox' id='admin-checkbox' className='input-checkbox' onClick={event => addCheckboxValue(event.target.id)}/>
+                        {/* <input type='checkbox' id='admin-checkbox' className='input-checkbox' onClick={event => addCheckboxValue(event.target.id)}/> */}
+                        <Radio 
+                            value='admin'
+                            checked={selectedUserLevel === 'admin'}
+                            onChange={(event)=> setSelectedUserLevel(event.target.value)}
+                            sx={{
+                                color: 'white'
+                            }}
+                        />
                         <label for='admin-checkbox' style={{fontWeight: '200'}}>Admin</label>
                     </div>
                     <div>
-                        <input type='checkbox' id='student-checkbox' className='input-checkbox' checked onClick={event => addCheckboxValue(event.target.id)}/>
+                        {/* <input type='checkbox' id='student-checkbox' className='input-checkbox' checked onClick={event => addCheckboxValue(event.target.id)}/> */}
+                        <Radio 
+                            value='student'
+                            checked={selectedUserLevel === 'student'}
+                            onChange={(event)=> setSelectedUserLevel(event.target.value)}
+                            sx={{
+                                color: 'white'
+                            }}
+                        />
                         <label for='student-checkbox' style={{fontWeight: '200'}}>Student</label>
                     </div>
                 </div>
 
                 <Input 
-                    labelText='Registration Number' 
-                    placeholder='Enter your username' 
+                    labelText='Email' 
+                    placeholder='Enter your email' 
                     type='email' 
                     name='email'
                     value={loginFormData.email}

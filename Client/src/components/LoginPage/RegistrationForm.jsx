@@ -8,7 +8,8 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
         email: '', 
         registrationNumber: '', 
         password: '', 
-        confirmPassword: ''
+        confirmPassword: '',
+        checkboxValue: false
     })
 
     function setFormData(name, value){
@@ -42,7 +43,8 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
         const   validPassword = registrationFormData.password.length !== 0,
                 samePassword = registrationFormData.password === registrationFormData.confirmPassword,
                 validEmail = emailValidation.test(registrationFormData.email), 
-                validRegistrationNumber = checkRegistrationNumber(registrationFormData.registrationNumber);
+                validRegistrationNumber = checkRegistrationNumber(registrationFormData.registrationNumber), 
+                isChecked = registrationFormData.checkboxValue === true;
 
         if(!validPassword){
             message = 'Entered Password is Invalid';
@@ -55,6 +57,9 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
         }
         if(!validRegistrationNumber){
             message = 'Entered Registration Number is incorrect';
+        }
+        if(!isChecked){
+            message = 'Agreement to our terms & policies is mandatory';
         }
 
         if(message.indexOf('Successfully') !== -1){
@@ -122,7 +127,7 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
                 />     
 
                 <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 1rem', gap: '1rem'}}>
-                    <input type='checkbox' style={{display: 'inline-block', marginBottom: '1.3rem'}} /> 
+                    <input type='checkbox' style={{display: 'inline-block', marginBottom: '1.3rem'}} checked={registrationFormData.checkboxValue} onClick={()=> setFormData('checkboxValue', !registrationFormData.checkboxValue)}/> 
                     <p style={{display: 'inline-block'}}>By creating an Account, I agree to the terms and conditions & privacy policy</p>
                 </div>
 
