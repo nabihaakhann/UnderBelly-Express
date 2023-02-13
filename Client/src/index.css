@@ -164,3 +164,8 @@ code {
 #admin-page{
   background: #f3f3f3;
 }
+
+#category-section li{
+  margin: 0.5rem;
+  cursor: pointer;
+}

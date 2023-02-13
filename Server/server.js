@@ -44,6 +44,19 @@ const Product = mongoose.model('Product', {
     ]
 })
 
+// GET REQUESTS
+
+// Admin Page
+app.get('/allCategories', (req, res)=>{
+    Product.find({}, {category: 1}, (err, result)=>{
+        if(!err){
+            console.log('All Categories sent to Client');
+            res.json(result);
+        }
+    })
+})
+
+
 // POST REQUESTS
 
 // Login & Register Page
@@ -162,7 +175,7 @@ app.post('/addCategory', (req, res)=>{
     }
 
     // Check if category already exists or not
-    Product.findOne({categoryName: req.body.category}, (err, result)=>{
+    Product.findOne({category: req.body.category}, (err, result)=>{
         if(!err){
             if(result === null){
                 const newCategory = new Product({
@@ -194,7 +207,9 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
 
     Product.findOne({category: req.body.categoryName}, (err, foundCategory)=>{
         if(!err){
+            // Check if Category Exists
             if(foundCategory){
+                // Check if Image is less than 16 MB
                 if(req.file.size > 16000000){
                     response.message = 'File Size should be less than 16MB';
                 }
@@ -218,7 +233,7 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
                     foundCategory.items.push(newItem);
                     foundCategory.save().then(console.log('New Item: ' + req.body.name + ' was successfully stored in DB'));
     
-                    response.message = 'Item Successfully Saved Added';
+                    response.message = 'Item Successfully Saved to DB';
                     response.success = true;
                 }
             }
@@ -228,6 +243,31 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
             }
 
             res.json(response); 
+        }
+    })
+})
+
+// DELETE REQUESTS
+app.delete('/category/:id', (req, res)=>{
+    console.log(req.params);
+
+    const response = {
+        success: false, 
+        message: ''
+    }
+
+    Product.findByIdAndDelete(req.params.id, (err, foundCategory)=>{
+        if(!err){
+            if(foundCategory){
+                response.success = true;
+                response.message = 'Category Successfully Deleted ';
+                console.log('Category with id: ' + req.params.id + ' successfully deleted from DB');
+            }
+            else{
+                response.message = 'Something went wrong';
+            }
+
+            res.json(response);
         }
     })
 })
