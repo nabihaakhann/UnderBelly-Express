@@ -98,7 +98,7 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
         <div style={divStyle}>
             {showOutput.display && <MessageBox>{showOutput.text}</MessageBox>}
 
-            <div className='form-wrapper card'>
+            <div className='form-wrapper card-dark'>
                 <p className='heading'>Welcome Back</p>
                 <Divider width='28%' />
 
@@ -110,7 +110,10 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                             checked={selectedUserLevel === 'admin'}
                             onChange={(event)=> setSelectedUserLevel(event.target.value)}
                             sx={{
-                                color: 'white'
+                                color: 'white', 
+                                '&.Mui-checked': {
+                                    color: Colors.primaryColor
+                                }
                             }}
                         />
                         <label for='admin-checkbox' style={{fontWeight: '200'}}>Admin</label>
@@ -122,7 +125,10 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                             checked={selectedUserLevel === 'student'}
                             onChange={(event)=> setSelectedUserLevel(event.target.value)}
                             sx={{
-                                color: 'white'
+                                color: 'white',
+                                '&.Mui-checked': {
+                                    color: Colors.primaryColor
+                                }
                             }}
                         />
                         <label for='student-checkbox' style={{fontWeight: '200'}}>Student</label>
@@ -146,7 +152,7 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                     handleChange={setFormData}
                 />
 
-                <p style={{alignSelf: 'end', marginBottom: '1rem'}}>Forgot Password?</p>
+                <HighlightedText style={{alignSelf: 'end', marginBottom: '1rem'}}>Forgot Password?</HighlightedText>
 
                 <Button 
                     color={Colors.primaryColor} 

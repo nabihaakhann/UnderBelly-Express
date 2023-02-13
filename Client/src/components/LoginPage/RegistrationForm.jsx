@@ -94,7 +94,7 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
         <div style={divStyle}>
             {showOutput.display && <MessageBox>{showOutput.text}</MessageBox>}
 
-            <div className="form-wrapper card" style={{paddingBottom: '5rem'}}>
+            <div className="form-wrapper card-dark" style={{paddingBottom: '5rem'}}>
                 <Input 
                     labelText='Email' 
                     placeholder='Enter your email address' 

@@ -1,12 +1,12 @@
-const { response } = require('express');
-
 require('dotenv').config();
 const   express = require('express'), 
         app = express(), 
         bodyParser = require('body-parser'), 
         mongoose = require('mongoose'), 
         bcrypt = require('bcrypt'), 
-        saltRounds = 10;
+        saltRounds = 10, 
+        multer = require('multer'),
+        fs = require('fs');
 
 // Establishing connection to DB
 mongoose.connect(process.env.MONGO_URI, (err)=>{
@@ -18,6 +18,9 @@ mongoose.connect(process.env.MONGO_URI, (err)=>{
 // Setting up body-parser
 app.use(bodyParser.json());
 
+// Setting up Multer
+const upload = multer({storage: multer.memoryStorage()});
+
 // User Schema
 // My orders and Reviews fields need to be designed
 const User = mongoose.model('User', {
@@ -28,8 +31,22 @@ const User = mongoose.model('User', {
     userImage: Buffer, 
     userLevel: String
 })
+const Product = mongoose.model('Product', {
+    category: String, 
+    items: [
+        {
+            name: String, 
+            description: String, 
+            price: Number, 
+            filterTags: [String], 
+            itemImage: Buffer
+        }
+    ]
+})
 
 // POST REQUESTS
+
+// Login & Register Page
 app.post('/register', (req, res)=>{
     console.log(req.body);
     let responseMessage = '';
@@ -131,6 +148,86 @@ app.post('/login/admin', (req, res)=>{
             }
 
             res.json(response);
+        }
+    })
+})
+
+// Admin Page
+app.post('/addCategory', (req, res)=>{
+    console.log(req.body);
+
+    const response = {
+        success: false, 
+        message: ''
+    }
+
+    // Check if category already exists or not
+    Product.findOne({categoryName: req.body.category}, (err, result)=>{
+        if(!err){
+            if(result === null){
+                const newCategory = new Product({
+                    category: req.body.category, 
+                    items: []
+                })
+                newCategory.save().then(console.log('Catgory: ' + `'${req.body.category}'` + ' saved to DB'));
+                response.message = 'Catgory Successfully added to DB';
+                response.success = true;
+            }
+            else{
+                console.log('Category ' + `'${req.body.category}'` + ' already exists in DB');
+                response.message = 'Category Already Exits in DB';
+            }
+
+            res.json(response);
+        }
+    })
+
+})
+
+app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
+    console.log(req.body, req.file);
+
+    const response = {
+        success: false, 
+        message: ''
+    }
+
+    Product.findOne({category: req.body.categoryName}, (err, foundCategory)=>{
+        if(!err){
+            if(foundCategory){
+                if(req.file.size > 16000000){
+                    response.message = 'File Size should be less than 16MB';
+                }
+                else{
+                    const newItem = {
+                                name: req.body.name, 
+                                description: req.body.description, 
+                                price: req.body.price, 
+                                filterTags: req.body.filterTags.split(','), 
+                                itemImage: ''
+                    }
+    
+                    if(!req.file){
+                        const defaultImageFile = fs.readFileSync('./assets/images/Default Food Image.jpg');
+                        newItem.itemImage = defaultImageFile;
+                    }
+                    else{
+                        newItem.itemImage = req.file.buffer
+                    }
+    
+                    foundCategory.items.push(newItem);
+                    foundCategory.save().then(console.log('New Item: ' + req.body.name + ' was successfully stored in DB'));
+    
+                    response.message = 'Item Successfully Saved Added';
+                    response.success = true;
+                }
+            }
+            else{
+                console.log('Category ' + `'${req.body.categoryName}' not found in DB`)
+                response.message = 'Entered Category Not Found';
+            }
+
+            res.json(response); 
         }
     })
 })
