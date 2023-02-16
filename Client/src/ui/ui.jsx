@@ -7,11 +7,11 @@ const Colors = {
 }
 
 // Width is in percentages
-export function Divider({width}){
+export function Divider({width, color, height}){
     const style = {
-        width: width,
-        height: '2px',
-        background: 'white',
+        width: width? width: '100%',
+        height: height? height: '2px',
+        background: color? color: 'white',
         margin: '0.2rem'
     }
 
@@ -55,21 +55,23 @@ export function Input({labelText, placeholder, type, name, value, handleChange})
                 placeholder={placeholder} 
                 name={name} 
                 value={value} 
-                onChange={event => handleChange(name, event.target.value)} />   
+                onChange={event => handleChange(name, event.target.value)} 
+                className='input-field'
+                />   
         </div>
     )
 }
 
-export function HighlightedText({children}){
+export function HighlightedText({children, style}){
     const [isHover, setHover] = useState(false);
 
-    const style={
+    const spanStyle={
         color: isHover ? Colors.primaryColor : 'white', 
         cursor: 'pointer'
     }
 
     return (
-        <span style={style} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)}> {children} </span>
+        <span style={{...spanStyle, ...style}} onMouseOver={()=> setHover(true)} onMouseOut={()=> setHover(false)}> {children} </span>
     )
 }
 
@@ -84,6 +86,25 @@ export function MessageBox({children, backgroundColor}){
     return(
         <div style={messageBoxStyle}>
             <p> {children} </p>
+        </div>
+    )
+}
+
+export function Heading({children}){
+    return (
+        <p className='heading'> {children} </p>
+    )
+}
+
+export function ImageBox({title, borderColor, imageURL}){
+    const boxStyle= { 
+        background: `url(${imageURL}) no-repeat center center/cover`, 
+        borderColor: borderColor? borderColor: 'white', 
+    }
+    
+    return (
+        <div style={boxStyle} className='image-box'>
+            <p> {title} </p>
         </div>
     )
 }

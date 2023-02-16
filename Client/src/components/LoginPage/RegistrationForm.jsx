@@ -1,28 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import {Input, Button, Colors, MessageBox} from '../ui/ui';
+import {Input, Button, Colors, MessageBox, HighlightedText} from '../../ui/ui';
 
-export default function RegistrationForm(){
+export default function RegistrationForm({showOutput, clearOutput, setOutput, login}){
     // Form Handling
-    const [registraionFormData, setRegistrationFormData] = useState({
+    const [registrationFormData, setRegistrationFormData] = useState({
         email: '', 
         registrationNumber: '', 
         password: '', 
-        confirmPassword: ''
+        confirmPassword: '',
+        checkboxValue: false
     })
-
-    //Show Message/Alert Box
-    const [showMessageBox, setMessageBox] = useState({
-        text: '', 
-        display: false
-    }); 
-
-    function clearMessageBox(){
-        setMessageBox({
-            text: '', 
-            display: false
-        })
-    }
 
     function setFormData(name, value){
         setRegistrationFormData(prevData => {
@@ -42,21 +30,21 @@ export default function RegistrationForm(){
         if(number.length === 10 && testOne && testTwo){
             return true;
         }
-
         return false;
     }
 
     function onSubmitRegistrationForm(){
-        console.table(registraionFormData);
+        console.table(registrationFormData);
 
         // Registration Form Validation 
         const emailValidation = /@vitbhopal.ac.in$/
         let message = 'Account Successfully created!';
 
-        const   validPassword = registraionFormData.password.length !== 0,
-                samePassword = registraionFormData.password === registraionFormData.confirmPassword,
-                validEmail = emailValidation.test(registraionFormData.email), 
-                validRegistrationNumber = checkRegistrationNumber(registraionFormData.registrationNumber);
+        const   validPassword = registrationFormData.password.length !== 0,
+                samePassword = registrationFormData.password === registrationFormData.confirmPassword,
+                validEmail = emailValidation.test(registrationFormData.email), 
+                validRegistrationNumber = checkRegistrationNumber(registrationFormData.registrationNumber), 
+                isChecked = registrationFormData.checkboxValue === true;
 
         if(!validPassword){
             message = 'Entered Password is Invalid';
@@ -70,15 +58,28 @@ export default function RegistrationForm(){
         if(!validRegistrationNumber){
             message = 'Entered Registration Number is incorrect';
         }
+        if(!isChecked){
+            message = 'Agreement to our terms & policies is mandatory';
+        }
 
-        // Show & Clear message box
-        setMessageBox({
-            display: true, 
-            text: message
-        })
-        setTimeout(()=>{
-            clearMessageBox();
-        }, 3000);
+        if(message.indexOf('Successfully') !== -1){
+           fetch('/register', {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(registrationFormData)
+           })
+           .then(response => response.json())
+           .then(response => {
+                setOutput(response.responseMessage);
+           })
+
+        }
+        else{
+            setOutput(message);
+        }
+
+        // Remove Message Box
+        clearOutput();
     }
 
     const divStyle = {
@@ -91,15 +92,15 @@ export default function RegistrationForm(){
 
     return (
         <div style={divStyle}>
-            {showMessageBox.display && <MessageBox>{showMessageBox.text}</MessageBox>}
+            {showOutput.display && <MessageBox>{showOutput.text}</MessageBox>}
 
-            <div className="form-wrapper card" style={{paddingBottom: '5rem'}}>
+            <div className="form-wrapper card-dark" style={{paddingBottom: '5rem'}}>
                 <Input 
                     labelText='Email' 
                     placeholder='Enter your email address' 
                     type='email' 
                     name='email'
-                    value={registraionFormData.email}
+                    value={registrationFormData.email}
                     handleChange={setFormData}
                 />        
                 <Input 
@@ -107,26 +108,26 @@ export default function RegistrationForm(){
                     placeholder='Enter your registration number' 
                     type='text' 
                     name='registrationNumber'
-                    value={registraionFormData.registrationNumber}
+                    value={registrationFormData.registrationNumber}
                     handleChange={setFormData}
                 />        
                 <Input 
                     labelText='Create Password'  
                     type='password' 
                     name='password'
-                    value={registraionFormData.password}
+                    value={registrationFormData.password}
                     handleChange={setFormData}
                 />        
                 <Input 
                     labelText='Confirm Password' 
                     type='password' 
                     name='confirmPassword'
-                    value={registraionFormData.confirmPassword}
+                    value={registrationFormData.confirmPassword}
                     handleChange={setFormData}
                 />     
 
                 <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 1rem', gap: '1rem'}}>
-                    <input type='checkbox' style={{display: 'inline-block', marginBottom: '1.3rem'}} /> 
+                    <input type='checkbox' style={{display: 'inline-block', marginBottom: '1.3rem'}} checked={registrationFormData.checkboxValue} onClick={()=> setFormData('checkboxValue', !registrationFormData.checkboxValue)}/> 
                     <p style={{display: 'inline-block'}}>By creating an Account, I agree to the terms and conditions & privacy policy</p>
                 </div>
 
@@ -136,6 +137,13 @@ export default function RegistrationForm(){
                     hoverColor={Colors.primaryColorDark} 
                     onButtonPress={onSubmitRegistrationForm}
                 > Register </Button>
+            
+                <div>
+                    <p>
+                        Already have an account? 
+                        <HighlightedText><strong onClick={login}>Log In</strong></HighlightedText>
+                    </p>
+                </div>
             </div>
         </div>
     )
