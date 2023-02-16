@@ -49,7 +49,7 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                     clearOutput();
         
                     if(response.success){
-                        navigate(`/${response.userId}/home`);
+                        navigate(`/${response.userId}/categories`);
                     }
                 })
             }

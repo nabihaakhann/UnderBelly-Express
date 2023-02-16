@@ -1,3 +1,5 @@
+const { join } = require('path');
+
 require('dotenv').config();
 const   express = require('express'), 
         app = express(), 
@@ -29,7 +31,9 @@ const User = mongoose.model('User', {
     contactNumber: Number, 
     address: String, 
     userImage: Buffer, 
-    userLevel: String
+    userImageType: String,
+    userLevel: String,
+    itemsRated: [String]
 })
 const Product = mongoose.model('Product', {
     category: String, 
@@ -39,12 +43,57 @@ const Product = mongoose.model('Product', {
             description: String, 
             price: Number, 
             filterTags: [String], 
-            itemImage: Buffer
+            itemImage: Buffer,
+            imageType: String, 
+            userRatings: [
+                {
+                    rating: Number, 
+                    userId: String
+                }
+            ],
+            currentRating: Number
         }
     ]
 })
 
 // GET REQUESTS
+
+// Home Page
+app.get('/categories/:category', (req, res)=>{
+    console.log(req.params);
+
+    Product.findOne({category: req.params.category}, {items: 1}, (err, foundCategory)=> {
+        if(!err){
+            const response = {
+                success: false, 
+                items: null
+            }
+
+            if(foundCategory){
+                response.success = true;
+                
+                // Base encoding images 
+                response.items = foundCategory.items.map((item)=> {
+                    return {
+                        name: item.name, 
+                        description: item.description, 
+                        price: item.price, 
+                        filterTags: item.filterTags, 
+                        itemImage: item.itemImage.toString('base64'), 
+                        _id: item._id
+                    }
+                })
+
+                console.log('Items in ' + req.params.category + ' sent back to client');
+            }
+            else{
+                console.log(`Category: ${req.params.category} not Found!`);
+            }
+
+            res.json(response);
+        }
+    })
+})
 
 // Admin Page
 app.get('/allCategories', (req, res)=>{
@@ -93,6 +142,8 @@ app.post('/register', (req, res)=>{
                 // Using Bcrypt for creating a unique hash
                 const hash = bcrypt.hashSync(req.body.password, saltRounds);
                 console.log('Hash generated for ' + req.body.password + ' : ' + hash);
+                
+                const defaultUserImage = fs.readFileSync('./assets/images/user image.png');
 
                 // Saving user details to DB
                 const newUser = new User({
@@ -100,8 +151,10 @@ app.post('/register', (req, res)=>{
                     password: hash, 
                     contactNumber: null,
                     address: null, 
-                    userImage: null, 
-                    userLevel: 'student'
+                    userImage: defaultUserImage,
+                    userImageType: 'image/png', 
+                    userLevel: 'student',
+                    itemsRated: []
                 })
 
                 newUser.save(err => {
@@ -235,11 +288,14 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
                 }
                 else{
                     const newItem = {
-                                name: req.body.name, 
-                                description: req.body.description, 
-                                price: req.body.price, 
-                                filterTags: req.body.filterTags.split(','), 
-                                itemImage: ''
+                        name: req.body.name, 
+                        description: req.body.description, 
+                        price: req.body.price, 
+                        filterTags: req.body.filterTags.split(','), 
+                        itemImage: '',
+                        itemImage: req.file.mimetype ? req.file.mimetype: 'image/jpg',
+                        currentRating: 0, 
+                        userRatings: []
                     }
     
                     if(!req.file){
