@@ -56,6 +56,26 @@ app.get('/allCategories', (req, res)=>{
     })
 })
 
+app.get('/admin/getUserData/:email', (req, res)=> {
+    console.log(req.params)
+
+    User.findOne({email: req.params.email}, (err, foundUser)=>{
+        if(!err){
+            let success = true;
+
+            if(!foundUser){
+                success = false;
+            }
+
+            res.json({
+                userData: foundUser, 
+                success: success
+            })
+            console.log('User Data sent back to client')
+        }
+    })
+})
+
 
 // POST REQUESTS
 
@@ -267,6 +287,30 @@ app.delete('/category/:id', (req, res)=>{
                 response.message = 'Something went wrong';
             }
 
+            res.json(response);
+        }
+    })
+})
+
+app.delete('/deleteUserData/:id', (req, res)=>{
+    console.log(req.params);
+
+    const response = {
+        success: false, 
+        message: ''
+    }
+
+    User.findByIdAndDelete(req.params.id, (err, foundUser)=> {
+        if(!err){
+            if(foundUser){
+                response.success = true;
+                response.message = 'User Data successfully deleted from DB';
+                console.log('User Data for id: ' + req.params.id + ' was successfully deleted from DB')
+            }
+            else{
+                response.message = 'No Account with the entered Email-ID exists';
+            }
+            
             res.json(response);
         }
     })

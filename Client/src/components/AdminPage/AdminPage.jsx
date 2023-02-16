@@ -1,5 +1,6 @@
-import { Heading} from "../../ui/ui";
+import { Heading, Colors} from "../../ui/ui";
 import MenuItemCard from "./MenuItemsCard";
+import Search from "./Search";
 
 import { useState } from "react";
 
@@ -9,6 +10,8 @@ export default function AdminPage(){
         type: '',
         message: ''
     });
+
+    
 
     function displayAlert(message, type){
         setShowAlert({
@@ -37,6 +40,15 @@ export default function AdminPage(){
             height: '20rem', 
             gap: '2rem'
         },
+        columnAlignment: {
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center'
+        }, 
+        rowAlignment: {
+            display: 'flex', 
+            justifyContent: 'space-between'
+        }
         
     }
 
@@ -51,18 +63,23 @@ export default function AdminPage(){
             </div>
 
             <div style={styles.gridStyle}>
+                {/*  Add Categories & Menu Items  */}
                 <MenuItemCard 
                     showAlert={showAlert}
                     displayAlert={displayAlert}
                     clearAlert={clearAlert}
                 />
                 
-                {/* <div className="card-light" style={styles.columnAlignment}> */}
-                    {/* Add/Remove Users section */}
-                {/* </div> */}
-                {/* <div className="card-light" style={styles.columnAlignment}> */}
-                    {/* User Queries section */}
-                {/* </div> */}
+                {/* Edit/Remove Menu Item & Users */}
+                <Search 
+                    showAlert={showAlert}
+                    displayAlert={displayAlert}
+                    clearAlert={clearAlert}
+                />
+
+                {/* User Queries section */}
+                <div className="card-light" style={styles.columnAlignment}>
+                </div>
             </div>
         </div>
     )
