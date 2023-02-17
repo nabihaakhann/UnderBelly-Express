@@ -1,3 +1,5 @@
+const { join } = require('path');
+
 require('dotenv').config();
 const   express = require('express'), 
         app = express(), 
@@ -29,7 +31,9 @@ const User = mongoose.model('User', {
     contactNumber: Number, 
     address: String, 
     userImage: Buffer, 
-    userLevel: String
+    userImageType: String,
+    userLevel: String,
+    itemsRated: [String]
 })
 const Product = mongoose.model('Product', {
     category: String, 
@@ -39,12 +43,57 @@ const Product = mongoose.model('Product', {
             description: String, 
             price: Number, 
             filterTags: [String], 
-            itemImage: Buffer
+            itemImage: Buffer,
+            imageType: String, 
+            userRatings: [
+                {
+                    rating: Number, 
+                    userId: String
+                }
+            ],
+            currentRating: Number
         }
     ]
 })
 
 // GET REQUESTS
+
+// Home Page
+app.get('/categories/:category', (req, res)=>{
+    console.log(req.params);
+
+    Product.findOne({category: req.params.category}, {items: 1}, (err, foundCategory)=> {
+        if(!err){
+            const response = {
+                success: false, 
+                items: null
+            }
+
+            if(foundCategory){
+                response.success = true;
+                
+                // Base encoding images 
+                response.items = foundCategory.items.map((item)=> {
+                    return {
+                        name: item.name, 
+                        description: item.description, 
+                        price: item.price, 
+                        filterTags: item.filterTags, 
+                        itemImage: item.itemImage.toString('base64'), 
+                        _id: item._id
+                    }
+                })
+
+                console.log('Items in ' + req.params.category + ' sent back to client');
+            }
+            else{
+                console.log(`Category: ${req.params.category} not Found!`);
+            }
+
+            res.json(response);
+        }
+    })
+})
 
 // Admin Page
 app.get('/allCategories', (req, res)=>{
@@ -52,6 +101,26 @@ app.get('/allCategories', (req, res)=>{
         if(!err){
             console.log('All Categories sent to Client');
             res.json(result);
+        }
+    })
+})
+
+app.get('/admin/getUserData/:email', (req, res)=> {
+    console.log(req.params)
+
+    User.findOne({email: req.params.email}, (err, foundUser)=>{
+        if(!err){
+            let success = true;
+
+            if(!foundUser){
+                success = false;
+            }
+
+            res.json({
+                userData: foundUser, 
+                success: success
+            })
+            console.log('User Data sent back to client')
         }
     })
 })
@@ -73,6 +142,8 @@ app.post('/register', (req, res)=>{
                 // Using Bcrypt for creating a unique hash
                 const hash = bcrypt.hashSync(req.body.password, saltRounds);
                 console.log('Hash generated for ' + req.body.password + ' : ' + hash);
+                
+                const defaultUserImage = fs.readFileSync('./assets/images/user image.png');
 
                 // Saving user details to DB
                 const newUser = new User({
@@ -80,8 +151,10 @@ app.post('/register', (req, res)=>{
                     password: hash, 
                     contactNumber: null,
                     address: null, 
-                    userImage: null, 
-                    userLevel: 'student'
+                    userImage: defaultUserImage,
+                    userImageType: 'image/png', 
+                    userLevel: 'student',
+                    itemsRated: []
                 })
 
                 newUser.save(err => {
@@ -215,11 +288,14 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
                 }
                 else{
                     const newItem = {
-                                name: req.body.name, 
-                                description: req.body.description, 
-                                price: req.body.price, 
-                                filterTags: req.body.filterTags.split(','), 
-                                itemImage: ''
+                        name: req.body.name, 
+                        description: req.body.description, 
+                        price: req.body.price, 
+                        filterTags: req.body.filterTags.split(','), 
+                        itemImage: '',
+                        itemImage: req.file.mimetype ? req.file.mimetype: 'image/jpg',
+                        currentRating: 0, 
+                        userRatings: []
                     }
     
                     if(!req.file){
@@ -267,6 +343,30 @@ app.delete('/category/:id', (req, res)=>{
                 response.message = 'Something went wrong';
             }
 
+            res.json(response);
+        }
+    })
+})
+
+app.delete('/deleteUserData/:id', (req, res)=>{
+    console.log(req.params);
+
+    const response = {
+        success: false, 
+        message: ''
+    }
+
+    User.findByIdAndDelete(req.params.id, (err, foundUser)=> {
+        if(!err){
+            if(foundUser){
+                response.success = true;
+                response.message = 'User Data successfully deleted from DB';
+                console.log('User Data for id: ' + req.params.id + ' was successfully deleted from DB')
+            }
+            else{
+                response.message = 'No Account with the entered Email-ID exists';
+            }
+            
             res.json(response);
         }
     })

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import '../index.css';
 
+import StarIcon from '@mui/icons-material/Star';
+
 const Colors = {
     primaryColor: '#E4905C', 
     primaryColorDark: '#cd8152'
@@ -105,6 +107,25 @@ export function ImageBox({title, borderColor, imageURL}){
     return (
         <div style={boxStyle} className='image-box'>
             <p> {title} </p>
+        </div>
+    )
+}
+
+export function ImageCard({item}){
+
+    return (
+        <div className='image-card'>
+            <img src={`data:image/jpg;base64,${item.itemImage}`} />
+            <div className='row-alignment' style={{width: '100%'}}>
+                <strong>{item.name}</strong>
+                <div>
+                    <StarIcon color='warning' />
+                    <span>{item.rating}</span>
+                </div>
+
+            </div>
+            <p>Rs {item.price} </p>
+            <p>{item.description}</p>
         </div>
     )
 }

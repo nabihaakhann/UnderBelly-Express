@@ -120,7 +120,7 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert}){
     return (
         <div>
             <div className="card-light" style={styles.columnAlignment}>
-                <h1 style={{fontWeight: 200}}>For Menu Items</h1>
+                <h1 style={{fontWeight: 400}}>For Menu Items</h1>
                 <div style={{marginBottom: '1rem', width: '25%'}}>
                     <Divider color='#D0D0D0' height='1px' />
                 </div>

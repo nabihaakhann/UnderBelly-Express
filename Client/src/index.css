@@ -30,7 +30,7 @@ code {
 
 /* Utility Classes */
 .dark-background{
-  background:url('./assets/images/dark wood.jpg') no-repeat;
+  background:url('./assets/images/Dark.jpg') no-repeat center center/cover;
 }
 
 .card-dark{
@@ -71,6 +71,39 @@ code {
   z-index: 1;
 }
 
+.image-card{
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  width: 23rem;
+  background: white;
+  color: black;
+  padding: 0.25rem;
+  padding-bottom: 0.85rem;
+}
+.image-card > img{
+  height: 20rem;
+  width: 100%;
+  border-radius: 5px;
+}
+.image-card > div{
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.image-card p{
+  align-self: start;
+  padding-left: 1rem;
+}
+.image-card > p:first-child{
+  color: var(--primary-color);
+}
+.image-card > p:last-child{
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
 .input-field{
   background: linear-gradient(109.46deg, rgba(201, 201, 201, 0.8) 1.57%, rgba(196, 196, 196, 0.1)); 
   opacity: 0.5; 
@@ -106,11 +139,16 @@ code {
   display: block;
 }
 
-#login-page, .dark-background, #admin-page{
+#login-page, #admin-page{
   background-size: cover;
   height: 100%;
   width: 100%;
   position: absolute;
+}
+
+.row-alignment{
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Login Page */
@@ -143,7 +181,15 @@ code {
   background:rgb(126, 113, 113);
   height: 5rem;
   width: 80rem;
-  margin: 2rem;
+  margin: 1rem;
+}
+
+/* Category Items */
+#category-items{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  margin-top: 3rem;
 }
 
 /* Error Page */
