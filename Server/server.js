@@ -27,7 +27,8 @@ const upload = multer({storage: multer.memoryStorage()});
 // My orders and Reviews fields need to be designed
 const User = mongoose.model('User', {
     email: String, 
-    password: String, 
+    password: String,
+    name: String, 
     contactNumber: Number, 
     address: String, 
     userImage: Buffer, 
@@ -95,6 +96,33 @@ app.get('/categories/:category', (req, res)=>{
     })
 })
 
+app.get('/:userId/userData', (req, res)=>{
+    console.log(req.params);
+
+    const response = {
+        userData: null
+    }
+    User.findById(req.params.userId, {email: 0, password: 0, itemsRated: 0, userLevel: 0}, (err, foundUser)=>{
+        if(!err){
+            if(foundUser){
+                console.log('id: ' + req.params.userId + ' details sent back to client');
+                response.userData = {
+                    name: foundUser.name, 
+                    address: foundUser.address, 
+                    contactNumber: foundUser.contactNumber, 
+                    userImage: foundUser.userImage.toString('base64'), 
+                    imageType: foundUser.userImageType
+                }
+            }
+            else{
+                console.log('No user with id ' + req.params.userId + ' was found');
+            }
+
+            res.json(response);
+        }
+    })
+})
+
 // Admin Page
 app.get('/allCategories', (req, res)=>{
     Product.find({}, {category: 1}, (err, result)=>{
@@ -125,6 +153,41 @@ app.get('/admin/getUserData/:email', (req, res)=> {
     })
 })
 
+app.get('/getMenuItem/:menuItem', (req, res)=>{
+    console.log(req.params);
+
+    Product.findOne({'items.name': req.params.menuItem}, {'items.$': 1}, (err, foundItem)=>{
+        if(!err){
+            const response = {
+                itemData: null
+            }
+            if(foundItem){
+                // console.log(foundItem)
+
+                const itemDetails = foundItem.items[0];
+    
+                console.log('Item Details with name: ' + req.params.menuItem);
+                response.itemData = {
+                    name: itemDetails.name, 
+                    description: itemDetails.description, 
+                    currentRating: itemDetails.currentRating, 
+                    price: itemDetails.price,
+                    itemImage: itemDetails.itemImage.toString('base64'),
+                    imageType: itemDetails.imageType
+                };
+                
+                console.log(response.itemData);
+                console.log('Item details sent back to client');
+            }
+            else{
+                console.log('Item Details for name: ' + req.params.menuItem + ' Not Found!');
+            }
+
+            res.json(response);
+        }
+    })
+})
+
 
 // POST REQUESTS
 
@@ -149,6 +212,7 @@ app.post('/register', (req, res)=>{
                 const newUser = new User({
                     email: req.body.email, 
                     password: hash, 
+                    name: req.body.email.substring(0, req.body.email.indexOf('@')),
                     contactNumber: null,
                     address: null, 
                     userImage: defaultUserImage,
@@ -293,7 +357,7 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
                         price: req.body.price, 
                         filterTags: req.body.filterTags.split(','), 
                         itemImage: '',
-                        itemImage: req.file.mimetype ? req.file.mimetype: 'image/jpg',
+                        imageType: req.file.mimetype ? req.file.mimetype: 'image/jpg',
                         currentRating: 0, 
                         userRatings: []
                     }

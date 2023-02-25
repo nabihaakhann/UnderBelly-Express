@@ -3,7 +3,10 @@ import Navbar from './Navbar';
 import { Heading, ImageBox, Colors } from '../ui/ui';
 import { Link, Outlet } from 'react-router-dom';
 
+
 export default function HomePage(){
+    
+
     // Styling
     const divStyle = {
         paddingBottom: '3rem',
@@ -15,24 +18,24 @@ export default function HomePage(){
     return(
         <div className='dark-background' style={divStyle}>
             <Navbar />
-            <Heading>Eat What Makes You Happy</Heading>
 
+            <Heading style={{marginTop: '2.5rem'}}>Eat What Makes You Happy</Heading>
 
             <div id='categories-wrapper'>
-                <Link to={'pastries'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Pastries'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Fresh Cream Pastries'
                         imageURL={require('../assets/images/pastries.jpg')}
                     />
                 </Link>
-                <Link to={'pasta-and-pizza'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Pasta-and-Pizza'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Baked Pasta & Pizza'
                         borderColor='orange'
                         imageURL={require('../assets/images/Baked.jpg')}
                     />
                 </Link>
-                <Link to={'sandwiches-and-burgers'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Sandwiches-and-Burgers'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Sandwiches & Burgers'
                         imageURL={require('../assets/images/Burgers.jpg')}

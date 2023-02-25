@@ -3,12 +3,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { Colors } from "../../ui/ui";
 
-export default function ShowUserData({userData, styles, onDeleteButtonPress}){
+export default function ShowUserData({userData, onDeleteButtonPress}){
     const wrapperStyle = {
         color: Colors.primaryColor,
         marginTop: '2rem', 
         width: '100%', 
-        ...styles
     }
 
     function onDeleteUserButtonPress(){
@@ -23,8 +22,11 @@ export default function ShowUserData({userData, styles, onDeleteButtonPress}){
         })
     }
 
+    // Formatting of JSON data for buffer data
+    userData.userImage = userData.userImage ? 'Buffer Data...': 'Image not found';
+
     return (
-        <div style={wrapperStyle} className='card-light'>
+        <div style={wrapperStyle} className='card-light column-alignment'>
             <pre> 
                 {JSON.stringify(userData, null, 2)}
             </pre>
