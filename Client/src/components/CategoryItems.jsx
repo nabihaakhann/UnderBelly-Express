@@ -1,4 +1,3 @@
-import { responsiveProperty } from "@mui/material/styles/cssUtils";
 import { useState, useEffect } from "react";
 import { ImageCard } from "../ui/ui";
 
@@ -14,13 +13,13 @@ export default function CategoryItems({searchParam}){
                 setItems(response.items);
             }
         })
-    }, []);
+    }, [searchParam]);
 
     return (
-        <div className="row-alignment" id="category-items">
+        <div id="category-items">
             {items.map(item => {
                 return <ImageCard 
-                    item = {item}
+                    itemData = {item}
                     key={item._id}
                 />
             })}

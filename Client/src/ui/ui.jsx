@@ -2,6 +2,8 @@ import { useState } from 'react';
 import '../index.css';
 
 import StarIcon from '@mui/icons-material/Star';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
 
 const Colors = {
     primaryColor: '#E4905C', 
@@ -92,9 +94,9 @@ export function MessageBox({children, backgroundColor}){
     )
 }
 
-export function Heading({children}){
+export function Heading({children, style}){
     return (
-        <p className='heading'> {children} </p>
+        <p className='heading' style={style}> {children} </p>
     )
 }
 
@@ -111,21 +113,33 @@ export function ImageBox({title, borderColor, imageURL}){
     )
 }
 
-export function ImageCard({item}){
+export function ImageCard({itemData, displayEditOptions}){
+
+    function onDeleteButtonPress(){
+        // fetch(`deleteMenuItem/`)
+    }
 
     return (
         <div className='image-card'>
-            <img src={`data:image/jpg;base64,${item.itemImage}`} />
+            <img src={`data:${itemData.imageType};base64,${itemData.itemImage}`} />
             <div className='row-alignment' style={{width: '100%'}}>
-                <strong>{item.name}</strong>
-                <div>
+                <strong>{itemData.name}</strong>
+                <div style={{alignItems: 'center', width: '13%'}} className='row-alignment'>
                     <StarIcon color='warning' />
-                    <span>{item.rating}</span>
+                    <span style={{color: 'grey'}}>{itemData.currentRating}</span>
                 </div>
-
             </div>
-            <p>Rs {item.price} </p>
-            <p>{item.description}</p>
+            <p style={{color: Colors.primaryColor}}>Rs {itemData.price} </p>
+            <p>{itemData.description}</p>
+
+            {
+                displayEditOptions && 
+                <div style={{alignSelf: 'end'}}>
+                    <IconButton color='error' onClick={onDeleteButtonPress}>
+                        <DeleteIcon />
+                    </IconButton>
+                </div>
+            }
         </div>
     )
 }

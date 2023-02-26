@@ -23,22 +23,23 @@ function App() {
     {
       path: '/:userId/categories',
       element: <HomePage />,
+      errorElement: <ErrorPage />,
       children: [
         {
-          path: 'pastries',
-          element: <CategoryItems searchParam='Fresh Cream Pastries' />
+          path: 'Pastries',
+          element: <CategoryItems searchParam='Pastries' />
         },
         {
-          path: 'pasta-and-pizza',
-          element: <CategoryItems searchParam='Baked Pasta & Pizza' />
+          path: 'Pasta-and-Pizza',
+          element: <CategoryItems searchParam='Pasta and Pizza' />
         },
         {
-          path: 'sandwiches-and-burgers',
-          element: <CategoryItems searchParam='Sandwiches & Pizza' />
+          path: 'Sandwiches-and-Burgers',
+          element: <CategoryItems searchParam='Sandwiches and Burgers' />
         },
         {
           path: 'starters-and-quickbites',
-          element: <CategoryItems searchParam='Quickbites' />
+          element: <CategoryItems searchParam='Starters & Quick Bites' />
         },
         {
           path: 'main-course',

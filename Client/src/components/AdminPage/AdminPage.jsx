@@ -2,7 +2,7 @@ import { Heading, Colors} from "../../ui/ui";
 import MenuItemCard from "./MenuItemsCard";
 import Search from "./Search";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AdminPage(){
     const [showAlert, setShowAlert] = useState({
@@ -10,6 +10,10 @@ export default function AdminPage(){
         type: '',
         message: ''
     });
+
+    useEffect(()=>{
+        document.title = 'UnderBelly Express | Admin Page';
+    },[])
 
     
 
@@ -62,8 +66,8 @@ export default function AdminPage(){
                 </div>
             </div>
 
+            {/*  Add Categories & Menu Items  */}
             <div style={styles.gridStyle}>
-                {/*  Add Categories & Menu Items  */}
                 <MenuItemCard 
                     showAlert={showAlert}
                     displayAlert={displayAlert}
@@ -71,11 +75,7 @@ export default function AdminPage(){
                 />
                 
                 {/* Edit/Remove Menu Item & Users */}
-                <Search 
-                    showAlert={showAlert}
-                    displayAlert={displayAlert}
-                    clearAlert={clearAlert}
-                />
+                <Search />
 
                 {/* User Queries section */}
                 <div className="card-light" style={styles.columnAlignment}>
