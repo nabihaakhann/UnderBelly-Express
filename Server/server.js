@@ -57,6 +57,18 @@ const Product = mongoose.model('Product', {
     ]
 })
 
+//contact form
+const ContactFormDataSchema = mongoose.model('ContactForm',{
+    name: {
+        type: String,
+        required: true
+    },
+    query: {
+        type: String,
+        required: true
+    }
+})
+
 // GET REQUESTS
 
 // Home Page
@@ -434,6 +446,27 @@ app.delete('/deleteUserData/:id', (req, res)=>{
             res.json(response);
         }
     })
+})
+
+
+
+
+//Contact Form
+  app.post('/contact', (req, res) => {
+    const Name = req.body.Name
+    const Query = req.body.Query
+
+    const formData = new User({
+        name: Name,
+        query: Query
+    })
+
+    try {
+        formData.save();
+        res.send("inserted data..")
+    } catch(err) {
+        console.log(err)
+    }
 })
 
 
