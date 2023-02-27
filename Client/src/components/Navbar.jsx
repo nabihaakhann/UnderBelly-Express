@@ -8,7 +8,7 @@ import SidePanel from './SidePanel';
 export default function Navbar(){
     const {userId} = useParams();
 
-    const [userInfo, setUserInfo] = useState();
+    const [userInfo, setUserInfo] = useState(null);
 
     const [showSidePanel, setSidePanel] = useState(false);
 
@@ -16,15 +16,11 @@ export default function Navbar(){
         loadUserData();
     }, [])
 
-    function loadUserData(){
-        fetch(`/${userId}/userData`)
-        .then(response => response.json())
-        .then(response => {
-            console.log(response.userData);
-            if(response.userData){
-               setUserInfo(response.userData);
-            }
-        })
+    async function loadUserData(){
+        const response = await fetch(`/${userId}/userData`);
+        const data = await response.json();
+        // console.log(data.userData);
+        setUserInfo(data.userData);
     }
 
     function displaySidePanel(){

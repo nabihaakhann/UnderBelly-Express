@@ -3,14 +3,17 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GridViewIcon from '@mui/icons-material/GridView';
+import LogoutIcon from '@mui/icons-material/Logout';
 import BusinessIcon from '@mui/icons-material/Business';
-import { grey, orange } from "@mui/material/colors";
+import { grey, orange, red } from "@mui/material/colors";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { Button, Colors, Divider } from "../ui/ui";
 
+
 export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
+
     const [editContactNumber, setEditContactNumber] = useState({
         edit: false, 
         newContactNumber: ''
@@ -33,6 +36,42 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
         setTimeout(()=>{
             setSnackBar(false);
         }, 2000);
+    }
+
+    function onUpdateProfilePhotoButtonPress(){
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = ()=> {
+            const file = input.files[0];
+            
+            if(file.size < 16000000){
+                const formData = new FormData();
+
+                formData.append('userId', userId);
+                formData.append('userProfilePhoto', file);
+
+                fetch('/updateProfilePhoto', {
+                    method: 'PUT', 
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(response => {
+                    if(response.success){
+                        setSnackBar(true);
+                        setAlert({type: 'success', message: response.message});
+                        loadUserData();
+                    }
+                })
+            }
+            else{
+                setSnackBar(true);
+                setAlert({type: 'error', message: 'Image Size should be less than 16 MB'}); 
+            }
+
+            clearSnackBar();
+        }
+        input.click();
     }
 
     function displayContactNumberForm(){
@@ -123,14 +162,17 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
             .then(response => response.json())
             .then(response => {
                 setSnackBar(true);
+                console.log('userAddresses before addition in hook: ', userInfo.addresses);
                 if(response.success){
                     setAlert({type: 'success', message: response.message});
+                    
                     loadUserData();
+                    console.log('userAddresses after addition in hook: ', userInfo.addresses);
+                    setUserAddresses(userInfo.addresses);
                 }
                 else{
                     setAlert({type: 'error', message: response.message});
                 }
-
                 clearSnackBar();
             })
         }
@@ -140,23 +182,13 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
             clearSnackBar();
         }
         else if(addNewAddress.display === false){
-            setAddNewAddress(prev => {
-                return {
-                    ...prev, 
-                    display: true
-                }
-            });
+            setAddNewAddress({display: true, newAddress: ''});
 
         }
     }
 
     function closeAddNewAddress(){
-        setAddNewAddress(prev => {
-            return {
-                ...prev, 
-                display: false
-            }
-        })
+        setAddNewAddress({display: false, newAddress: ''})
     }
 
     // Styling object
@@ -183,11 +215,15 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
                     src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
                     style={{height: '9rem', width: '9rem'}}
                 />
-                <Fab color="warning" sx={{
-                    position: 'absolute', 
-                    bottom: '-5px',
-                    right: '0'
-                }}>
+                <Fab 
+                    color="warning" 
+                    sx={{
+                        position: 'absolute', 
+                        bottom: '-5px',
+                        right: '0'
+                    }}
+                    onClick={onUpdateProfilePhotoButtonPress}
+                >
                     <CameraAltIcon />
                 </Fab>
             </div>
@@ -255,104 +291,122 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
                 <span style={{marginLeft: '1rem', paddingTop: '0.5rem'}}>My Addresses</span>
             </p>
 
-            <div id='address-section'>
-                {userAddresses.length > 0 ? 
-                    userAddresses.map((address)=>{
-                        return (
-                            <div key={address._id} className='row-alignment'>
-                                <Radio 
-                                    checked={address.default}
-                                    value={address._id}
-                                    onChange={event => setNewDefaultAddress(event.target.value)}
-                                    sx={{
-                                        color: 'white', 
-                                        '&.Mui-checked': {
-                                            color: Colors.primaryColor
-                                        }
-                                    }}
-                                />
-                                <TextField 
-                                    multiline
-                                    variant="outlined"
-                                    value={address.address}
-                                    disabled
-                                    sx={{
-                                        width: '88%',
-                                        '& .MuiOutlinedInput-root.Mui-disabled':{
-                                            // color: grey[300],
-
-                                            '& fieldset': {
-                                                borderColor: grey[600],
+            <div style={{width: '100%', height: '100%', justifyContent: 'space-between'}} className='column-alignment'>
+                <div id='address-section'>
+                    {userAddresses.length > 0 ? 
+                        userAddresses.map((address)=>{
+                            return (
+                                <div key={address._id} className='row-alignment'>
+                                    <Radio 
+                                        checked={address.default}
+                                        value={address._id}
+                                        onChange={event => setNewDefaultAddress(event.target.value)}
+                                        sx={{
+                                            color: 'white', 
+                                            '&.Mui-checked': {
+                                                color: Colors.primaryColor
                                             }
-                                        }, 
-                                        '& .MuiInputBase-inputMultiline.Mui-disabled': {
-                                            color: grey[300]
-                                        },
-                                        '& .MuiInputBase-root.Mui-disabled > textarea': {
-                                            color: grey[300]
-                                        }
-                                    }}
-                                />
-                            </div>
-                        )
-                    })
-                :
-                    <p style={{fontSize: '1rem', textAlign: 'center'}}>No Saved Addresses</p>
-                }
+                                        }}
+                                    />
+                                    <TextField 
+                                        multiline
+                                        variant="outlined"
+                                        value={address.address}
+                                        disabled
+                                        sx={{
+                                            width: '88%',
+                                            '& .MuiOutlinedInput-root.Mui-disabled':{
+                                                // color: grey[300],
 
-                {/* Add New Address Form */}
-                {addNewAddress.display && 
-                    <TextField 
-                        multiline
-                        minRows={4}
-                        variant='outlined'
-                        color="warning"
-                        label='Enter Address'
-                        onChange={event => {
-                            const currValue = event.target.value;
-                            setAddNewAddress(prev => {
-                                return {
-                                    ...prev, 
-                                    newAddress: currValue
-                                }
-                        })}}
-                        style={{width: '100%'}}
-                        sx={{
-                            '& .MuiOutlinedInput-root':{
-                                color: grey[300],
-
-                                '& fieldset': {
-                                    borderColor: grey[600],
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: orange[800]
-                                }
-                            }, 
-                            '& .MuiFormLabel-root': {
-                                color: grey[600], 
-                            },
-                            '& .MuiInputLabel-formControl.Mui-focused': {
-                                color: orange[800]
-                            }    
-                        }}
-                    />
-                }
-                
-                <div className="row-alignment">
-                    <MuiButton 
-                        color="warning" 
-                        variant='outlined' 
-                        onClick={onAddAddressButtonPress}
-                    > Add Address </MuiButton>
-
-                    {addNewAddress.display && 
-                        <MuiButton 
-                            color="warning"
-                            onClick={closeAddNewAddress}
-                        >Cancel</MuiButton>
+                                                '& fieldset': {
+                                                    borderColor: grey[600],
+                                                }
+                                            }, 
+                                            '& .MuiInputBase-inputMultiline.Mui-disabled': {
+                                                color: grey[300]
+                                            },
+                                            '& .MuiInputBase-root.Mui-disabled > textarea': {
+                                                color: grey[300]
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            )
+                        })
+                    :
+                        <p style={{fontSize: '1rem', textAlign: 'center'}}>No Saved Addresses</p>
                     }
+
+                    {/* Add New Address Form */}
+                    {addNewAddress.display && 
+                        <TextField 
+                            multiline
+                            minRows={4}
+                            variant='outlined'
+                            color="warning"
+                            label='Enter Address'
+                            onChange={event => {
+                                const currValue = event.target.value;
+                                setAddNewAddress(prev => {
+                                    return {
+                                        ...prev, 
+                                        newAddress: currValue
+                                    }
+                            })}}
+                            style={{width: '100%'}}
+                            sx={{
+                                '& .MuiOutlinedInput-root':{
+                                    color: grey[300],
+
+                                    '& fieldset': {
+                                        borderColor: grey[600],
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: orange[800]
+                                    }
+                                }, 
+                                '& .MuiFormLabel-root': {
+                                    color: grey[600], 
+                                },
+                                '& .MuiInputLabel-formControl.Mui-focused': {
+                                    color: orange[800]
+                                }    
+                            }}
+                        />
+                    }
+                    
+                    <div className="row-alignment">
+                        <MuiButton 
+                            color="warning" 
+                            variant='outlined' 
+                            onClick={onAddAddressButtonPress}
+                        > Add Address </MuiButton>
+
+                        {addNewAddress.display && 
+                            <MuiButton 
+                                color="warning"
+                                onClick={closeAddNewAddress}
+                            >Cancel</MuiButton>
+                        }
+                    </div>
+                </div>
+
+                <div style={{alignSelf: 'start'}}>
+                    <div style={{marginBottom: '1rem'}} >
+                        <Link to={`/${userId}/orders`} style={{textDecoration: 'none', color: 'inherit', alignItems: 'center'}} className='row-alignment'>
+                            <GridViewIcon /> 
+                            <p style={{marginLeft: '1rem'}}>My Orders</p>
+                        </Link>
+                    </div>
+                    <div style={{marginBottom: '1rem', width: '2rem'}}>
+                    <Link to={`/`} style={{textDecoration: 'none', color: 'inherit', alignItems: 'center', color: red[500]}} className='row-alignment'>
+                            <LogoutIcon color="error" /> 
+                            <p style={{marginLeft: '1rem'}}>Logout</p>
+                        </Link>
+                    </div>
                 </div>
             </div>
+
 
 
 

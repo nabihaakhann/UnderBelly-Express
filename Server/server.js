@@ -1,3 +1,4 @@
+const { response } = require('express');
 const { join } = require('path');
 
 require('dotenv').config();
@@ -450,6 +451,21 @@ app.put('/updateDefaultAddress', (req, res)=>{
                     console.log(message);
                     res.json({success: true, message: message});
                 }
+            })
+        }
+    })
+})
+
+app.put('/updateProfilePhoto', upload.single('userProfilePhoto'), (req, res)=>{
+    console.log(req.body, req.file);
+
+    User.findByIdAndUpdate(req.body.userId, {$set: {userImage: req.file.buffer, userImageType: req.file.mimetype}}, (err, foundUser)=>{
+        if(!err){
+            console.log('For User: ' + req.body.userId ,'Updated Profile Photo in DB successfully!');
+
+            res.json({
+                success: true, 
+                message: 'Updated Profile Photo'
             })
         }
     })
