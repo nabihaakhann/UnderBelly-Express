@@ -104,7 +104,6 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
 
                 <div style={checkboxWrapper}>
                     <div>
-                        {/* <input type='checkbox' id='admin-checkbox' className='input-checkbox' onClick={event => addCheckboxValue(event.target.id)}/> */}
                         <Radio 
                             value='admin'
                             checked={selectedUserLevel === 'admin'}
@@ -119,7 +118,6 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                         <label for='admin-checkbox' style={{fontWeight: '200'}}>Admin</label>
                     </div>
                     <div>
-                        {/* <input type='checkbox' id='student-checkbox' className='input-checkbox' checked onClick={event => addCheckboxValue(event.target.id)}/> */}
                         <Radio 
                             value='student'
                             checked={selectedUserLevel === 'student'}
@@ -158,6 +156,7 @@ export default function LoginForm({register, setOutput, clearOutput, showOutput}
                     color={Colors.primaryColor} 
                     hoverColor={Colors.primaryColorDark} 
                     onButtonPress={onSubmitLoginForm}
+                    margin={{marginTop: '2rem', marginBottom: '1rem', }}
                     > Login </Button>
                 
                 <p style={{fontWeight: 200, marginBottom: '5rem'}}>

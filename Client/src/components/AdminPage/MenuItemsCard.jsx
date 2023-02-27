@@ -4,7 +4,7 @@ import { TextField, Button, Alert } from "@mui/material";
 import { useState } from "react";
 import CategorySection from "./CategorySection";
 
-export default function MenuItemCard({showAlert, displayAlert, clearAlert}){
+export default function MenuItemCard({showAlert, displayAlert, clearAlert, editItemDetails}){
     const [addMenuItemFormData, setAddMenuFormData] = useState({
         name: '', 
         categoryName: '',  
@@ -16,6 +16,10 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert}){
         name: 'None', 
         file: ''
     });
+
+    editItemDetails && function(){
+        
+    }();
 
     function handleMenuItemFormChange(name, value){
         setAddMenuFormData((prevData)=>{
@@ -81,8 +85,6 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert}){
         }
         clearAlert();
     }
-
-    
 
     // Styling objects
     const styles = {
@@ -210,7 +212,7 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert}){
                 </div>
 
                 <div style={styles.rowAlignment}>
-                        <Button 
+                    <Button 
                         variant="text" 
                         onClick={onClearButtonPress}
                     >Clear</Button>

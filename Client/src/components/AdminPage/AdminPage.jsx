@@ -11,10 +11,11 @@ export default function AdminPage(){
         message: ''
     });
 
+    const [editItemDetails, setEditItemDetails] = useState(null);
+
     useEffect(()=>{
         document.title = 'UnderBelly Express | Admin Page';
     },[])
-
     
 
     function displayAlert(message, type){
@@ -33,6 +34,10 @@ export default function AdminPage(){
                 message: ''
             })
         }, 3000);
+    }
+
+    function handleEditItemDetails(itemData){
+        setEditItemDetails(itemData);
     }
     
     // Styling object
@@ -72,10 +77,13 @@ export default function AdminPage(){
                     showAlert={showAlert}
                     displayAlert={displayAlert}
                     clearAlert={clearAlert}
+                    editItemDetails={editItemDetails}
                 />
                 
                 {/* Edit/Remove Menu Item & Users */}
-                <Search />
+                <Search 
+                    handleEditItemDetails={handleEditItemDetails}
+                />
 
                 {/* User Queries section */}
                 <div className="card-light" style={styles.columnAlignment}>

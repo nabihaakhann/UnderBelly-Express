@@ -51,12 +51,6 @@ ul{
   color: black;
 }
 
-.loader{
-  margin: 2rem;
-  width: 100%;
-  color: rgb(66, 65, 65);
-}
-
 .image-box{
   width: 35rem; 
   height: 18rem; 
@@ -104,7 +98,6 @@ ul{
 }
 .image-card p{
   align-self: start;
-  padding-left: 1rem;
 }
 .image-card > p:last-child{
   font-size: 0.75rem;
@@ -194,7 +187,7 @@ ul{
 #navbar{
   /* background:rgb(126, 113, 113); */
   height: 5rem;
-  width: 80rem;
+  width: 96rem;
   margin: 1rem;
   margin-bottom: 2rem;
   display: flex;
@@ -231,7 +224,7 @@ ul{
 }
 
 #navbar > div:last-child{
-  width: 78%;
+  width: 90%;
 }
 
 #navbar > div:last-child li{
@@ -241,6 +234,38 @@ ul{
   justify-content: center;
   align-items: center;
   margin: 0 1rem;
+}
+
+#navbar > div:last-child li:hover{
+  color: #E4905C;
+  cursor: pointer;
+}
+
+/* Side Panel */
+#side-panel{
+  background: #262A31;
+  position: absolute;
+  right: 0; 
+  top: 0.5rem;
+  height: 98.7%;
+  width: 30rem;
+  z-index: 2;
+  padding: 2rem;
+  color: rgb(209, 204, 204);
+}
+
+#side-panel p{
+  font-size: 1.2rem;
+}
+
+#side-panel > *, #address-section > *{
+  margin-bottom: 1.5rem;
+}
+
+#address-section{
+  padding: 1rem 0;
+  align-self: start;
+  width: 100%;
 }
 
 
@@ -264,6 +289,7 @@ ul{
   left: 0; 
   height: 100%;
   width: 100%;
+  color: black;
 }
 
 /* Admin Page */

@@ -1,17 +1,18 @@
-import { Colors, ImageCard } from "../../ui/ui";
+import { Colors, ImageCard, Loader } from "../../ui/ui";
 import ShowUserData from "./ShowUserData";
 
-import { Radio, TextField, Button, CircularProgress } from "@mui/material";
+import { Radio, TextField, Button } from "@mui/material";
 import { useState } from "react";
 
-export default function Search({showAlert, displayAlert, clearAlert}){
+export default function Search({handleEditItemDetails}){
     const [searchForm, setSearchForm] = useState({
         type: 'user', 
         search: ''
     });
     const [showSearchOutput, setSearchOutput] = useState({
-        display: false, 
-        output: null
+        displayOutput: false, 
+        output: null,
+        displayNotFound: false
     });
     const [loader, setLoader] = useState(false);
 
@@ -24,23 +25,36 @@ export default function Search({showAlert, displayAlert, clearAlert}){
         // Remove any output present
         setSearchOutput({
             display: false, 
-            output: null
+            output: null,
+            displayNotFound: false
         })
     }
 
     function onSubmitSearchForm(){
+        // Remove any previous search result
+        setSearchOutput({
+            display: false, 
+            output: null,
+            displayNotFound: false
+        })
+
+        // Show Loader
         setLoader(true);
 
         if(searchForm.type === 'user'){
             fetch(`/admin/getUserData/${searchForm.search}`)
             .then(response => response.json())
             .then(response => {
+                setLoader(false);
                 if(response.success){
-                    setLoader(false);
                     setSearchOutput({
-                        display: true, 
-                        output: response.userData
+                        displayOutput: true, 
+                        output: response.userData,
+                        displayNotFound: false
                     })
+                }
+                else{
+                    displayNotFound();
                 }
             })
         }
@@ -48,15 +62,27 @@ export default function Search({showAlert, displayAlert, clearAlert}){
             fetch(`/getMenuItem/${searchForm.search}`)
             .then(response => response.json())
             .then(response => {
+                setLoader(false);
                 if(response.itemData){
-                    setLoader(false);
                     setSearchOutput({
-                        display: true, 
-                        output: response.itemData
+                        displayOutput: true, 
+                        output: response.itemData,
+                        displayNotFound: false
                     })
+                }
+                else{
+                    displayNotFound();
                 }
             })
         }
+    }
+
+    function displayNotFound(){
+        setSearchOutput({
+            displayOutput: false, 
+            output: null, 
+            displayNotFound: true
+        })
     }
 
     function onDeleteUserData(message){
@@ -69,14 +95,15 @@ export default function Search({showAlert, displayAlert, clearAlert}){
         })
 
         // Displaying Alert 
-        displayAlert(message, 'success');
-        clearAlert();
+        // displayAlert(message, 'success');
+        // clearAlert();
 
         // Clearing out the result from screen
         setTimeout(()=> {
             setSearchOutput({
-                display: false, 
-                output: null
+                displayOutput: false, 
+                output: null,
+                displayNotFound: false
             })
         }, 3000);
     }
@@ -143,15 +170,10 @@ export default function Search({showAlert, displayAlert, clearAlert}){
             </div>           
             
             {/* Displaying Loader */}
-            {loader && 
-                <div className='column-alignment loader'>
-                    <CircularProgress color="warning"/>
-                    <p style={{marginTop: '1rem'}}>Loading Data...</p>
-                </div>
-            }
+            {loader && <Loader textColor='black'/>}
             
             {/* Search Output */}
-            {(showSearchOutput.display && searchForm.type === 'user') &&
+            {(showSearchOutput.displayOutput && searchForm.type === 'user') &&
                 <ShowUserData 
                     userData={showSearchOutput.output}
                     onDeleteButtonPress={onDeleteUserData}
@@ -159,20 +181,24 @@ export default function Search({showAlert, displayAlert, clearAlert}){
             }
 
             {
-                (showSearchOutput.display && searchForm.type === 'menu-item') && 
+                (showSearchOutput.displayOutput && searchForm.type === 'menu-item') && 
                 <div style={{marginTop: '2rem'}}>
                     <ImageCard 
                         itemData={showSearchOutput.output}
                         displayEditOptions={true}  
+                        handleEditItemDetails={handleEditItemDetails}
                     />
                 </div>
             }
 
-            {/* {
-                showAlert.display && <div style={styles.alertWrapper}>
-                    <Alert severity={showAlert.type}>{showAlert.message}</Alert>
+            {/* Output when nothing found */}
+            {showSearchOutput.displayNotFound && 
+                <div style={{ padding: '0 1.5rem', margin: '2rem', width: '100%'}}>
+                    <div className="card-light">
+                        <p style={{textAlign: 'center'}}>Uh Oh! Nothing Found :(  </p>
+                    </div>
                 </div>
-            } */}
+            }
         </div>
     )
 }

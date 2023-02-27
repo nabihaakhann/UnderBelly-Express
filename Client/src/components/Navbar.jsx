@@ -1,7 +1,7 @@
 import SearchIcon from '@mui/icons-material/Search';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import {useParams} from 'react-router-dom'
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useEffect } from 'react';
 
 import SidePanel from './SidePanel';
 
@@ -13,16 +13,25 @@ export default function Navbar(){
     const [showSidePanel, setSidePanel] = useState(false);
 
     useLayoutEffect(()=>{
+        loadUserData();
+    }, [])
+
+    function loadUserData(){
         fetch(`/${userId}/userData`)
         .then(response => response.json())
         .then(response => {
             console.log(response.userData);
             if(response.userData){
-                setUserInfo(response.userData);
+               setUserInfo(response.userData);
             }
-            console.log(userInfo);
         })
-    }, [])
+    }
+
+    function displaySidePanel(){
+        setSidePanel(
+            showSidePanel ? false : true
+        )
+    }
 
     return(
         <>
@@ -39,17 +48,27 @@ export default function Navbar(){
                         <li> <BookmarkBorderOutlinedIcon /> Menu</li>
                         <li> <BookmarkBorderOutlinedIcon /> My Cart</li>
                         <li> <BookmarkBorderOutlinedIcon /> About Us</li>
-                        <li>
-                            {/* <img 
-                                src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
-                                style={{height: '2.8rem', width: '2.8rem', cursor:'pointer'}}
-                            /> */}
-                        </li>
+                        {userInfo && 
+                            <li onClick={displaySidePanel}>
+                                <img 
+                                    src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
+                                    style={{height: '2.5rem', width: '2.5rem', cursor:'pointer'}}
+                                />
+                                <p>Me</p>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>
 
-            {showSidePanel && <SidePanel userInfo={userInfo} />}
+            {showSidePanel && 
+                <SidePanel 
+                    displaySidePanel={displaySidePanel}
+                    userInfo={userInfo} 
+                    loadUserData={loadUserData}
+                />
+            }
+
         </>
     )
 }

@@ -27,10 +27,15 @@ const upload = multer({storage: multer.memoryStorage()});
 // My orders and Reviews fields need to be designed
 const User = mongoose.model('User', {
     email: String, 
-    password: String,
-    name: String, 
-    contactNumber: Number, 
-    address: String, 
+    password: String, 
+    contactNumber: Number,
+    registrationNumber: String, 
+    addresses: [
+        {
+            address: String, 
+            default: Boolean
+        }
+    ], 
     userImage: Buffer, 
     userImageType: String,
     userLevel: String,
@@ -79,6 +84,7 @@ app.get('/categories/:category', (req, res)=>{
                         name: item.name, 
                         description: item.description, 
                         price: item.price, 
+                        currentRating: item.currentRating,
                         filterTags: item.filterTags, 
                         itemImage: item.itemImage.toString('base64'), 
                         _id: item._id
@@ -107,8 +113,8 @@ app.get('/:userId/userData', (req, res)=>{
             if(foundUser){
                 console.log('id: ' + req.params.userId + ' details sent back to client');
                 response.userData = {
-                    name: foundUser.name, 
-                    address: foundUser.address, 
+                    registrationNumber: foundUser.registrationNumber, 
+                    addresses: foundUser.addresses, 
                     contactNumber: foundUser.contactNumber, 
                     userImage: foundUser.userImage.toString('base64'), 
                     imageType: foundUser.userImageType
@@ -168,6 +174,7 @@ app.get('/getMenuItem/:menuItem', (req, res)=>{
     
                 console.log('Item Details with name: ' + req.params.menuItem);
                 response.itemData = {
+                    id: itemDetails._id,
                     name: itemDetails.name, 
                     description: itemDetails.description, 
                     currentRating: itemDetails.currentRating, 
@@ -212,9 +219,9 @@ app.post('/register', (req, res)=>{
                 const newUser = new User({
                     email: req.body.email, 
                     password: hash, 
-                    name: req.body.email.substring(0, req.body.email.indexOf('@')),
+                    registrationNumber: req.body.registrationNumber,
                     contactNumber: null,
-                    address: null, 
+                    address: [], 
                     userImage: defaultUserImage,
                     userImageType: 'image/png', 
                     userLevel: 'student',
@@ -298,6 +305,40 @@ app.post('/login/admin', (req, res)=>{
             }
 
             res.json(response);
+        }
+    })
+})
+
+// Home Page
+app.post('/saveNewContactNumber', (req, res)=>{
+    console.log(req.body);
+
+    User.findByIdAndUpdate(req.body.userId, {$set: {contactNumber: req.body.contactNumber}}, (err, foundUser)=>{
+        if(!err){
+            if(foundUser){
+                console.log('Updated contact number for user: ' + req.body.userId);
+
+                res.json({
+                    success: 'true', 
+                    message: 'New Number Saved'
+                })
+            }
+        }
+    })
+})
+
+app.post('/addNewAddress', (req, res)=>{
+    console.log(req.body);
+
+    User.findByIdAndUpdate(req.body.userId, {$push: {addresses: req.body.newAddress}}, (err, foundUser)=>{
+        if(!err){
+            if(foundUser){
+                console.log('For User ID: ' + req.body.userId, 'New address for saved in DB Successfully');
+                res.json({
+                    success: true, 
+                    message: 'Address Saved in DB'
+                })
+            }
         }
     })
 })
@@ -387,7 +428,35 @@ app.post('/addMenuItem', upload.single('imageFile'), (req, res)=>{
     })
 })
 
+// PUT REQUESTS
+// Home Page
+app.put('/updateDefaultAddress', (req, res)=>{
+    console.log(req.body);
+
+    User.findById(req.body.userId, {addresses: 1},(err, foundUser)=>{
+        if(!err){
+            foundUser.addresses.forEach(address => {
+                if(String(address._id) === req.body.addressId){
+                    address.default = true;
+                }
+                else{
+                    address.default = false;
+                }
+            })
+
+            foundUser.save((err, updated)=>{
+                if(!err){
+                    const message = 'Updated New Default Address in the DB';
+                    console.log(message);
+                    res.json({success: true, message: message});
+                }
+            })
+        }
+    })
+})
+
 // DELETE REQUESTS
+// Admin Page
 app.delete('/category/:id', (req, res)=>{
     console.log(req.params);
 
@@ -425,7 +494,7 @@ app.delete('/deleteUserData/:id', (req, res)=>{
             if(foundUser){
                 response.success = true;
                 response.message = 'User Data successfully deleted from DB';
-                console.log('User Data for id: ' + req.params.id + ' was successfully deleted from DB')
+                console.log('User Data for id: ' + req.params.id + ' was successfully deleted from DB');
             }
             else{
                 response.message = 'No Account with the entered Email-ID exists';
@@ -436,6 +505,27 @@ app.delete('/deleteUserData/:id', (req, res)=>{
     })
 })
 
+app.delete('/deleteMenuItem/:id', (req, res)=>{
+    User.findByIdAndDelete(req.params.id, (err, foundItem)=>{
+        if(!err){
+            const response = {
+                success: false, 
+                message: ''
+            }
+            if(foundItem){
+                response.success = true;
+                response.message = 'Menu Item Deleted Successfully';
+                console.log('Menu Item with id: ' + req.params.id + ' was successfully deleted from DB');
+            }
+            else{
+                response.message = "Something went wrong!";
+                console.log('Menu Item with id: ' + req.params.id + ' not found in DB');
+            }
+
+            res.json(response);
+        }
+    })
+})
 
 app.listen(5000, ()=>{
     console.log('The Server is running on port 5000');
