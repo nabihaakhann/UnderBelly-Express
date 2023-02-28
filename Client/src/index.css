@@ -161,7 +161,9 @@ ul{
 
 /* Login Page */
 #login-page{
-  background: url('./assets/images/Login\ Page\ Edited.png') no-repeat center bottom/cover;
+  background: linear-gradient(to top,rgba(255, 128, 0,0.3),rgba(255, 128, 0,0.0)),
+  linear-gradient(to right,rgb(255, 128, 0,0.3),rgba(255, 128, 0,0.0)),
+   url('./assets/images/Login\ Page\ Edited.png') no-repeat center bottom/cover;
 }
 
 .form-wrapper{
