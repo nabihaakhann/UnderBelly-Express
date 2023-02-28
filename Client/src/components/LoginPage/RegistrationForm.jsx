@@ -136,6 +136,7 @@ export default function RegistrationForm({showOutput, clearOutput, setOutput, lo
                     color={Colors.primaryColor} 
                     hoverColor={Colors.primaryColorDark} 
                     onButtonPress={onSubmitRegistrationForm}
+                    margin={{margin: '1rem'}}
                 > Register </Button>
             
                 <div>

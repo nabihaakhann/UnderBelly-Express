@@ -2,9 +2,14 @@ import '../index.css';
 import Navbar from './Navbar';
 import { Heading, ImageBox, Colors } from '../ui/ui';
 import { Link, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 export default function HomePage(){
+
+    useEffect(()=>{
+        document.title = 'UnderBelly Express | Categories';
+    }, [])
     
 
     // Styling
@@ -28,33 +33,33 @@ export default function HomePage(){
                         imageURL={require('../assets/images/pastries.jpg')}
                     />
                 </Link>
-                <Link to={'Pasta-and-Pizza'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Pasta and Pizza'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Baked Pasta & Pizza'
                         borderColor='orange'
                         imageURL={require('../assets/images/Baked.jpg')}
                     />
                 </Link>
-                <Link to={'Sandwiches-and-Burgers'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Sandwiches and Burgers'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Sandwiches & Burgers'
                         imageURL={require('../assets/images/Burgers.jpg')}
                     />
                 </Link>
-                <Link to={'starters-and-quickbites'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Starters'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Starters & Quick Bites'
                         borderColor='orange'
                         imageURL={require('../assets/images/Starters.jpg')}
                     />
                 </Link>
-                <Link to={'main-course'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Main Course'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Main Course Meals'
                         imageURL={require('../assets/images/Main-Course.jpg')}
                     />
                 </Link>
-                <Link to={'beverages'} style={{textDecoration: 'none', color: 'white'}}>
+                <Link to={'Beverages'} style={{textDecoration: 'none', color: 'white'}}>
                     <ImageBox 
                         title='Beverages'
                         borderColor='orange'

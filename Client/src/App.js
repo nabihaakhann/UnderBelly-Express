@@ -30,23 +30,23 @@ function App() {
           element: <CategoryItems searchParam='Pastries' />
         },
         {
-          path: 'Pasta-and-Pizza',
+          path: 'Pasta and Pizza',
           element: <CategoryItems searchParam='Pasta and Pizza' />
         },
         {
-          path: 'Sandwiches-and-Burgers',
+          path: 'Sandwiches and Burgers',
           element: <CategoryItems searchParam='Sandwiches and Burgers' />
         },
         {
-          path: 'starters-and-quickbites',
-          element: <CategoryItems searchParam='Starters & Quick Bites' />
+          path: 'Starters',
+          element: <CategoryItems searchParam='Starters' />
         },
         {
-          path: 'main-course',
+          path: 'Main Course',
           element: <CategoryItems searchParam='Main Course' />
         },
         {
-          path: 'beverages',
+          path: 'Beverages',
           element: <CategoryItems searchParam='Beverages' />
         }
       ]
