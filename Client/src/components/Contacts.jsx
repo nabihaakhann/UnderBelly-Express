@@ -1,20 +1,23 @@
 import React, { useState } from "react";
+import {useParams} from 'react-router-dom';
 
 const ContactForm = () => {
   
   const [status, setStatus] = useState("Submit");
+  const {userId} = useParams();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
     const { name, email, message } = e.target.elements;
     let details = {
+      userId: userId,
       name: name.value,
       email: email.value,
       message: message.value,
     };
     
-    let response = await fetch("http://localhost:5000/contact", {
+    let response = await fetch("/contact", {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
