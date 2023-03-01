@@ -45,12 +45,14 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
         input.onchange = ()=> {
             const file = input.files[0];
             
-            if(file.size < 16000000){
+            if(file.size < 16 * Math.pow(10, 6)){
                 const formData = new FormData();
 
                 formData.append('userId', userId);
                 formData.append('userProfilePhoto', file);
-
+                
+                // setAlert({type: 'warning', message: 'Uploading Photo...'});
+                
                 fetch('/updateProfilePhoto', {
                     method: 'PUT', 
                     body: formData

@@ -64,15 +64,10 @@ const Product = mongoose.model('Product', {
 })
 
 //contact form
-const ContactFormDataSchema = mongoose.model('ContactForm',{
-    name: {
-        type: String,
-        required: true
-    },
-    query: {
-        type: String,
-        required: true
-    }
+const Contact = mongoose.model('contact-queries', {
+    name: String, 
+    message: String,
+    email: String
 })
 
 // GET REQUESTS
@@ -559,20 +554,23 @@ app.delete('/deleteMenuItem/:id', (req, res)=>{
 
 //Contact Form
   app.post('/contact', (req, res) => {
-    const Name = req.body.Name
-    const Query = req.body.Query
+    console.log(req.body);
 
-    const formData = new User({
-        name: Name,
-        query: Query
-    })
+    const newQuery = new Contact({
+        email: req.body.email, 
+        name: req.body.name, 
+        message: req.body.message
+    })
 
-    try {
-        formData.save();
-        res.send("inserted data..")
-    } catch(err) {
-        console.log(err)
-    }
+    newQuery.save((err) => {
+        if(!err){
+            console.log('The Contact Query made by user: ' + req.body.userId + 'was saved successfully in DB');
+            req.json({
+                success: true, 
+                message: 'Query Successfully Submitted!'
+            }) 
+        }
+    })
 })
 
 

@@ -4,6 +4,7 @@ import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage/AdminPage';
 import ErrorPage from './components/ErrorPage';
 import CategoryItems from './components/CategoryItems';
+import ContactPage from './components/Contacts';
 
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 
@@ -57,7 +58,7 @@ function App() {
     },
     {
       path: '/:userId/contact',
-      element: <Contact />
+      element: <ContactPage />
     }
 
   ])  

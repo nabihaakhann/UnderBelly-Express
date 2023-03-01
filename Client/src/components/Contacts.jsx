@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {useParams} from 'react-router-dom';
 
-const ContactForm = () => {
+const ContactPage = () => {
   
   const [status, setStatus] = useState("Submit");
   const {userId} = useParams();
@@ -56,4 +56,4 @@ const ContactForm = () => {
   );
 };
 
-export default ContactForm;
+export default ContactPage;
