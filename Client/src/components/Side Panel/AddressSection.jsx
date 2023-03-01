@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { TextField, Button, Radio } from "@mui/material";
+import { useEffect, useState } from "react";
+import { TextField, Button, Radio, IconButton } from "@mui/material";
 import GridViewIcon from '@mui/icons-material/GridView';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BusinessIcon from '@mui/icons-material/Business';
+import Delete from "@mui/icons-material/Delete";
 import { grey, orange, red } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import { Colors } from "../../ui/ui";
@@ -13,6 +14,10 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
         display: false, 
         newAddress: ''
     });
+
+    useEffect(()=>{
+        setUserAddresses(userInfo.addresses);
+    }, [userInfo.addresses])
 
     function setNewDefaultAddress(id){
         setUserAddresses(prevAddresses => {
@@ -62,13 +67,10 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
             .then(response => response.json())
             .then(response => {
                 setSnackBar(true);
-                // console.log('userAddresses before addition in hook: ', userInfo.addresses);
                 if(response.success){
                     setAlert({type: 'success', message: response.message});
                     
                     loadUserData();
-                    // console.log('userAddresses after addition in hook: ', userInfo.addresses);
-                    setUserAddresses(userInfo.addresses);
                 }
                 else{
                     setAlert({type: 'error', message: response.message});
@@ -87,8 +89,38 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
         }
     }
 
+    function onDeleteAddressButtonPress(id){
+        fetch(`/${userId}/deleteAddress/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(response => {
+            // console.log(response)
+            setSnackBar(true);
+            if(response.success){
+                setAlert({type: 'success', message: response.message});
+                
+                loadUserData();
+            }
+            else{
+                setAlert({type: 'error', message: response.message});
+            }
+
+                clearSnackBar();
+        })
+    }
+
     function closeAddNewAddress(){
         setAddNewAddress({display: false, newAddress: ''})
+    }
+
+    const adderssesStyle = {
+        color: grey[600], 
+        fontSize: '1rem',
+        borderColor: grey[600], 
+        border: '1px solid',
+        borderRadius: '5px', 
+        padding: '1rem'
     }
 
     return (
@@ -116,28 +148,21 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
                                             }
                                         }}
                                     />
-                                    <TextField 
-                                        multiline
-                                        variant="outlined"
-                                        value={address.address}
-                                        disabled
+                                    <p style={adderssesStyle}>
+                                        {address.address}
+                                    </p>
+                                     <IconButton 
+                                        style={{marginLeft: '0.5rem'}} 
                                         sx={{
-                                            width: '88%',
-                                            '& .MuiOutlinedInput-root.Mui-disabled':{
-                                                // color: grey[300],
-
-                                                '& fieldset': {
-                                                    borderColor: grey[600],
-                                                }
-                                            }, 
-                                            '& .MuiInputBase-inputMultiline.Mui-disabled': {
-                                                color: grey[300]
-                                            },
-                                            '& .MuiInputBase-root.Mui-disabled > textarea': {
-                                                color: grey[300]
+                                            color: 'white', 
+                                            '&:hover': {
+                                                color: orange[800]
                                             }
-                                        }}
-                                    />
+                                        }}>
+                                        <Delete 
+                                            onClick={() => onDeleteAddressButtonPress(address._id)}
+                                        />
+                                    </IconButton>
                                 </div>
                             )
                         })

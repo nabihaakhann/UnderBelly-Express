@@ -472,6 +472,27 @@ app.put('/updateProfilePhoto', upload.single('userProfilePhoto'), (req, res)=>{
 })
 
 // DELETE REQUESTS
+// Home Page
+app.delete('/:userId/deleteAddress/:id', (req, res)=>{
+    console.log(req.params);
+
+    const resposne = {
+        success: false, 
+        message: 'Something Went Wrong!'
+    }
+
+    User.findByIdAndUpdate(req.params.userId, {$pull: {addresses: {_id: req.params.id}}}, (err, foundUser)=>{
+        if(!err){
+            console.log(`Address: ${req.params.id} deleted successfully from DB for User: ${req.params.userId}`);
+            
+            response.success = true;
+            response.message = 'Address Successfully Deleted';
+        }   
+
+        res.json(response);
+    })
+})
+
 // Admin Page
 app.delete('/category/:id', (req, res)=>{
     console.log(req.params);
