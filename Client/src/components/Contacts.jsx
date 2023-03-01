@@ -52,6 +52,7 @@ const ContactForm = () => {
 //take button from ui
 //divider
 //navbar
+//background image ni css file
   );
 };
 
