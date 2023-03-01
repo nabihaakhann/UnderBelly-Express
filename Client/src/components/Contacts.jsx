@@ -49,6 +49,9 @@ const ContactForm = () => {
       </div>
       <button type="submit">{status}</button>
     </form>
+//take button from ui
+//divider
+//navbar
   );
 };
 
