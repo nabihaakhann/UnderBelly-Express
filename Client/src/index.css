@@ -301,3 +301,59 @@ ul{
   margin: 0.5rem;
   cursor: pointer;
 }
+
+
+/*contact page*/
+
+.btn{
+  background-color: #000;
+  color: white;
+  width:150px;
+  font-size: 20px;
+  padding: 8px 30px;
+  margin: 30px 70px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.2s;  
+  float:right;
+  
+}
+
+.btn:hover{
+  background: #564434;
+}
+
+.banner{
+  width:1200px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  background: white;
+  border-radius: 1rem;
+  color: black;
+  height:700px;
+}
+.col{
+  flex-basis: 50%;
+  min-width: 300px;
+  height: 100%;
+  border-radius: 1rem;
+  color: white;
+  align-items: center;
+  justify-items: center;
+
+
+}
+.form-item{
+  display: inline-block;
+  color: black;
+  font-size: 20px;
+  padding: 8px 30px;
+  margin: 30px 70px;
+  border-radius: 30px;
+  text-decoration: none; 
+  
+}
+
+
