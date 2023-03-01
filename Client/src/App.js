@@ -54,7 +54,12 @@ function App() {
     {
       path: '/:adminId/admin', 
       element: <AdminPage />
+    },
+    {
+      path: '/:userId/contact',
+      element: <Contact />
     }
+
   ])  
 
   return (
