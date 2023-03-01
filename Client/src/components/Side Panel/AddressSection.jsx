@@ -1,118 +1,18 @@
-import { Fab, IconButton, TextField, Button as MuiButton, Snackbar, Alert, Radio } from "@mui/material";
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import EditIcon from "@mui/icons-material/Edit";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useState } from "react";
+import { TextField, Button, Radio } from "@mui/material";
 import GridViewIcon from '@mui/icons-material/GridView';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BusinessIcon from '@mui/icons-material/Business';
 import { grey, orange, red } from "@mui/material/colors";
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Colors } from "../../ui/ui";
 
-import { Button, Colors, Divider } from "../ui/ui";
-
-
-export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
-
-    const [editContactNumber, setEditContactNumber] = useState({
-        edit: false, 
-        newContactNumber: ''
-    });
-
+export default function AddressSection({userId, userInfo, loadUserData, setAlert, setSnackBar, clearSnackBar}){
     const [userAddresses, setUserAddresses] = useState(userInfo.addresses);
     const [addNewAddress, setAddNewAddress] = useState({
         display: false, 
         newAddress: ''
     });
-
-    const [showSnackBar, setSnackBar] = useState(false)
-    const [alert, setAlert] = useState({
-        type: 'error',
-        message: ''
-    })
-    const {userId} = useParams();
-
-    function clearSnackBar(){
-        setTimeout(()=>{
-            setSnackBar(false);
-        }, 2000);
-    }
-
-    function onUpdateProfilePhotoButtonPress(){
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = ()=> {
-            const file = input.files[0];
-            
-            if(file.size < 16000000){
-                const formData = new FormData();
-
-                formData.append('userId', userId);
-                formData.append('userProfilePhoto', file);
-
-                fetch('/updateProfilePhoto', {
-                    method: 'PUT', 
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(response => {
-                    if(response.success){
-                        setSnackBar(true);
-                        setAlert({type: 'success', message: response.message});
-                        loadUserData();
-                    }
-                })
-            }
-            else{
-                setSnackBar(true);
-                setAlert({type: 'error', message: 'Image Size should be less than 16 MB'}); 
-            }
-
-            clearSnackBar();
-        }
-        input.click();
-    }
-
-    function displayContactNumberForm(){
-        setEditContactNumber(prev => {
-            return {
-                    edit: prev.edit? false: true,
-                    newContactNumber: ''
-                }
-        })
-    }
-
-    function saveContactNumber(){
-        if(editContactNumber.newContactNumber && editContactNumber.newContactNumber.length === 10){
-            fetch('/saveNewContactNumber', {
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    userId: userId,
-                    contactNumber: editContactNumber.newContactNumber
-                })
-            })
-            .then(response => response.json())
-            .then(response => {
-                setSnackBar(true);
-                if(response.success){
-                    setAlert({type: 'success', message: response.message});
-
-                    loadUserData();
-                }
-                else{
-                    setAlert({type: 'error', message: response.message});
-                }
-            })
-        }
-        else{
-            setSnackBar(true);
-            setAlert({type: 'error', message: 'Entered Contact Number is Invalid'});
-        }
-        
-        clearSnackBar();
-    }
 
     function setNewDefaultAddress(id){
         setUserAddresses(prevAddresses => {
@@ -162,12 +62,12 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
             .then(response => response.json())
             .then(response => {
                 setSnackBar(true);
-                console.log('userAddresses before addition in hook: ', userInfo.addresses);
+                // console.log('userAddresses before addition in hook: ', userInfo.addresses);
                 if(response.success){
                     setAlert({type: 'success', message: response.message});
                     
                     loadUserData();
-                    console.log('userAddresses after addition in hook: ', userInfo.addresses);
+                    // console.log('userAddresses after addition in hook: ', userInfo.addresses);
                     setUserAddresses(userInfo.addresses);
                 }
                 else{
@@ -191,100 +91,8 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
         setAddNewAddress({display: false, newAddress: ''})
     }
 
-    // Styling object
-    const styles= {
-        editOptionsStyle: {
-            color: grey[500],
-            '&:hover': {
-                color: orange[800]
-            }
-        },
-        textfieldStyle: {
-            background: '#D1CCCC'
-        }
-    }
-
-
     return (
-        <div id="side-panel" className="column-alignment">
-            <ArrowForwardIosIcon style={{alignSelf: 'end', cursor: 'pointer', marginBottom: '1rem'}} onClick={displaySidePanel}/>
-            
-            {/* User Profile Photo Section */}
-            <div style={{position: 'relative', marginBottom: '1.5rem'}}>
-                <img 
-                    src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
-                    style={{height: '9rem', width: '9rem'}}
-                />
-                <Fab 
-                    color="warning" 
-                    sx={{
-                        position: 'absolute', 
-                        bottom: '-5px',
-                        right: '0'
-                    }}
-                    onClick={onUpdateProfilePhotoButtonPress}
-                >
-                    <CameraAltIcon />
-                </Fab>
-            </div>
-            <p> {userInfo.registrationNumber} </p>
-
-            {/* Contact Form */}
-            {editContactNumber.edit ? 
-                <div className="column-alignment" style={{width: '90%'}}>
-                    <TextField 
-                        label='New Number'
-                        variant="filled"
-                        number
-                        value={editContactNumber.newContactNumber}
-                        onChange={event => {
-                            const currValue = event.target.value;
-                            setEditContactNumber(prevDetails => {
-                                return ({
-                                    ...prevDetails,
-                                    newContactNumber: currValue
-                                })
-                            })
-                        }}
-                        color='warning'
-                        sx={{
-                            ...styles.textfieldStyle,
-                            width: '80%'
-                        }}
-                    />
-                    
-                    <div className="row-alignment" style={{width: '100%', alignItems: 'center', marginTop: '1rem', padding: '0 3rem'}}>
-                        <div style={{width: '30%'}}>
-                            <MuiButton 
-                                color='warning'
-                                variant="outlined"
-                                onClick={saveContactNumber}
-                            >Save</MuiButton>
-                        </div>
-                        <MuiButton 
-                            color="warning"
-                            sx={{
-                            marginTop: '3px'
-                        }}
-                            onClick={displayContactNumberForm}
-                        >Cancel</MuiButton>
-                    </div>
-                </div>
-                : 
-                <p style={{marginBottom: '1rem'}}>Contact Number: {userInfo.contactNumber ? userInfo.contactNumber : <em>Add Number</em>} 
-                    <span>
-                        <IconButton onClick={displayContactNumberForm}  size='small'
-                        style={{marginLeft: '1rem', transform: 'translateY(-3px)', }}>
-                                <EditIcon 
-                                    sx={styles.editOptionsStyle}
-                                />
-                        </IconButton>
-                    </span>
-                </p>
-            }
-
-            <Divider />
-
+        <>
             {/* Address Section */}
             <p className="row-alignment" style={{ alignSelf: 'start', marginTop: '2rem'}}>
                 <BusinessIcon fontSize='large'/>
@@ -376,17 +184,17 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
                     }
                     
                     <div className="row-alignment">
-                        <MuiButton 
+                        <Button 
                             color="warning" 
                             variant='outlined' 
                             onClick={onAddAddressButtonPress}
-                        > Add Address </MuiButton>
+                        > Add Address </Button>
 
                         {addNewAddress.display && 
-                            <MuiButton 
+                            <Button 
                                 color="warning"
                                 onClick={closeAddNewAddress}
-                            >Cancel</MuiButton>
+                            >Cancel</Button>
                         }
                     </div>
                 </div>
@@ -406,22 +214,6 @@ export default function SidePanel({userInfo, displaySidePanel, loadUserData}){
                     </div>
                 </div>
             </div>
-
-
-
-
-            {/* Display Alert output */}
-            {showSnackBar && 
-                <Snackbar 
-                    open={showSnackBar}
-                    autoHideDuration={3000}
-                    anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-                >
-                    <Alert severity={alert.type} variant='filled'> 
-                        {alert.message}
-                    </Alert>
-                </Snackbar>
-            }
-        </div>
+        </>
     )
 }

@@ -3,7 +3,7 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import {useParams} from 'react-router-dom'
 import { useLayoutEffect, useState, useEffect } from 'react';
 
-import SidePanel from './SidePanel';
+import SidePanel from './Side Panel/SidePanel';
 
 export default function Navbar(){
     const {userId} = useParams();
