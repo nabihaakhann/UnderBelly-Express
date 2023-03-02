@@ -15,9 +15,31 @@ const ContactPage = () => {
  }
 
 
-  
   const [status, setStatus] = useState("Submit");
   const {userId} = useParams();
+
+
+
+   //show box
+  const [show, setShow] = useState({
+    text: '', 
+    display: false
+  }); 
+
+  const clearShow=()=>{
+    setTimeout(()=>{
+       setShow({
+            text: '', 
+            display: false
+        })
+    }, 1000);
+  }
+  function displayShow(text){
+    setShow({
+      text: text, 
+      display: true
+    })
+  }
 
   const[contactForm, setContactForm] = useState({
     name:'',
@@ -42,6 +64,7 @@ const ContactPage = () => {
       message: message.value,
     };
     
+
     let response = await fetch("/contact", {
       method: "POST",
       headers: {
@@ -51,8 +74,10 @@ const ContactPage = () => {
     });
     
     setStatus("Submit");
+    displayShow("Your response has been submitted");
     let result = await response.json();
     alert(result.message);
+    clearShow("");
 
   };
   
@@ -71,8 +96,30 @@ const ContactPage = () => {
             <h2>Contact Information</h2><br/><br/>
             Contact us incase of any queries!<br/><br/>
             <div>
-              <div>Phone</div>
-              <div style={{display:"block"}}>+91-091-0911  +91999999999</div>
+              <div>Phone : </div>
+              <div style={{margin:"20px"}}>
+                <ul>
+                  <li><table>
+                    <tr><td>Eshaan :</td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                  </table></li>
+                </ul>
+              </div>
+              <div>Email: </div>
+              <div style={{margin:"20px"}}>
+                <ul>
+                  <li><table>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                  </table></li>
+                </ul>
+              </div>
+          
+
             </div>
           </div>
         </div>
@@ -81,20 +128,22 @@ const ContactPage = () => {
 
 
         <div className="col">
+          <p className='col-heading'>Contact Us</p>
           <form onSubmit={handleSubmit} style={{padding:"1rem", float:"center",margin:"10px",height:"97%"}}>
             <div>
               <label name="name" className="form-item" value={contactForm.name} handleChange={setContactFormData}>Name:</label>
-              <input stygle={{textDecoration:"none"}} type="text" id="name" required />
+              <input className="form-field" type="text" id="name" required />
             </div>
             <div>
               <label email="email"className="form-item" value={contactForm.email} handleChange={setContactFormData}>Email:</label>
-              <input type="email" id="email" required />
+              <input className="form-field" type="email" id="email" required />
             </div>
             <div>
               <label message="message" className="form-item" value={contactForm.message} handleChange={setContactFormData}>Message:</label>
-              <textarea id="message" required />
+              <textarea className="form-field" id="message" required />
             </div>
             <button className="btn" type="submit">{status}</button>
+            <div className="form-message">{show.message}</div>
           </form>
         </div>
         
