@@ -311,11 +311,11 @@ ul{
   width:150px;
   font-size: 20px;
   padding: 8px 30px;
-  margin: 30px 70px;
+  margin: 10px 10px;
   border-radius: 30px;
   text-decoration: none;
   transition: background 0.2s;  
-  float:right;
+  float:left;
   
 }
 
@@ -324,7 +324,7 @@ ul{
 }
 
 .banner{
-  width:1200px;
+  width: 1100px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -332,7 +332,8 @@ ul{
   background: white;
   border-radius: 1rem;
   color: black;
-  height:700px;
+  height:1400px;
+  margin-top: 4rem;
 }
 .col{
   flex-basis: 50%;
@@ -358,15 +359,131 @@ ul{
 
 .col-heading{
   display: flex;
-  color: black;
+  color: white;
   font-size: 4rem;
   font-family: 'La Belle Aurore', cursive;
   font-weight: 200;
   justify-content: center;
 }
+.col-heading2{
+  display: flex;
+  color: white;
+  font-size: 1rem;
+  font-family: 'Poppins';
+  justify-content: center;
+}
+
+
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+.custom-field {
+  position: relative;
+  font-size: 15px;
+  border-top: 20px solid transparent;
+  margin: 20px;
+  display: inline-block;
+  --field-padding: 12px;
+}
+
+.custom-field .placeholder {
+  position: absolute;
+  left: var(--field-padding);
+  width: calc(100% - (var(--field-padding) * 2));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  top: 22px;
+  line-height: 100%;
+  transform: translateY(-50%);
+  color: #aaa;
+  transition: 
+    top 0.3s ease,
+    color 0.3s ease,
+    font-size 0.3s ease;
+}
+
+.custom-field input:valid + .placeholder,
+.custom-field input:focus + .placeholder,
+.custom-field input:not(:placeholder-shown) + .placeholder {
+  top: -10px;
+  font-size: 15px;
+  color: #222;
+}
+.custom-field textarea:valid + .placeholder,
+.custom-field textarea:focus + .placeholder,
+.custom-field textarea:not(:placeholder-shown) + .placeholder {
+  top: -10px;
+  font-size: 15px;
+  color: #222;
+}
+
+.custom-field input {
+  border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #f2f2f2;
+  padding: var(--field-padding);
+  border-radius: 3px;
+  width: 250px;
+  outline: none;
+  font-size: 14px;
+  border-radius: 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background:
+    linear-gradient(90deg, #222, #222) center bottom/0 0.15em no-repeat,
+    linear-gradient(90deg, #ccc, #ccc) left bottom/100% 0.15em no-repeat,
+    linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
+  transition: background-size 0.3s ease;
+}
+.custom-field textarea{
+  border: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #f2f2f2;
+  padding: var(--field-padding);
+  border-radius: 3px;
+  width: 400px;
+  height: 100px;
+  outline: none;
+  font-size: 14px;
+  border-radius: 0;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background:
+    linear-gradient(90deg, #222, #222) center bottom/0 0.15em no-repeat,
+    linear-gradient(90deg, #ccc, #ccc) left bottom/100% 0.15em no-repeat,
+    linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
+  transition: background-size 0.3s ease;
+
+}
+
+.custom-field input.valid,
+.custom-field input:focus {
+  background-size: 100% 0.15em, 100% 0.1em, 100%;
+}
+.custom-field textarea.valid,
+.custom-field textarea:focus {
+  background-size: 100% 0.15em, 100% 0.1em, 100%;
+}
+
+
+
+
+
+
+
+
+
+
 .form-field{
-  background: linear-gradient(109.46deg, rgba(201, 201, 201, 0.8) 1.57%, rgba(196, 196, 196, 0.1)); 
-  opacity: 0.5; 
   border-radius: 7px; 
   backdrop-filter: blur(30px);
   padding: 1rem;
@@ -375,12 +492,24 @@ ul{
   font-size: 1.2rem;
   font-weight: 200;
   border: none;
+  appearance: none;
+  --field-padding: 12px;
+  background: #f2f2f2;
+  outline: none;
+  background:
+  linear-gradient(90deg, #222, #222) center bottom/0 0.15em no-repeat,
+  linear-gradient(90deg, #222, #222) left bottom/100% 0.15em no-repeat,
+  linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
+transition: background-size 0.3s ease;
+
 }
-.form-field{
-  color: black;
+.form-field input:valid,
+.form-field input:focus {
+  background-size: 100% 0.15em, 100% 0.1em, 100%;
 }
+
+
 .form-message{
   color:black;
-  transition: 2s;
 }
 
