@@ -301,3 +301,86 @@ ul{
   margin: 0.5rem;
   cursor: pointer;
 }
+
+
+/*contact page*/
+
+.btn{
+  background-color: #000;
+  color: white;
+  width:150px;
+  font-size: 20px;
+  padding: 8px 30px;
+  margin: 30px 70px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.2s;  
+  float:right;
+  
+}
+
+.btn:hover{
+  background: #564434;
+}
+
+.banner{
+  width:1200px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  background: white;
+  border-radius: 1rem;
+  color: black;
+  height:700px;
+}
+.col{
+  flex-basis: 50%;
+  min-width: 300px;
+  height: 100%;
+  border-radius: 1rem;
+  color: white;
+  align-items: center;
+  justify-items: center;
+
+
+}
+.form-item{
+  display: inline-block;
+  color: black;
+  font-size: 20px;
+  padding: 8px 0px;
+  margin: 30px,0px;
+  border-radius: 30px;
+  text-decoration: none; 
+  
+}
+
+.col-heading{
+  display: flex;
+  color: black;
+  font-size: 4rem;
+  font-family: 'La Belle Aurore', cursive;
+  font-weight: 200;
+  justify-content: center;
+}
+.form-field{
+  background: linear-gradient(109.46deg, rgba(201, 201, 201, 0.8) 1.57%, rgba(196, 196, 196, 0.1)); 
+  opacity: 0.5; 
+  border-radius: 7px; 
+  backdrop-filter: blur(30px);
+  padding: 1rem;
+  width: 100%;
+  color: rgb(0, 0, 0);
+  font-size: 1.2rem;
+  font-weight: 200;
+  border: none;
+}
+.form-field{
+  color: black;
+}
+.form-message{
+  color:black;
+  transition: 2s;
+}
+

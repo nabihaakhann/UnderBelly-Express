@@ -565,7 +565,7 @@ app.delete('/deleteMenuItem/:id', (req, res)=>{
     newQuery.save((err) => {
         if(!err){
             console.log('The Contact Query made by user: ' + req.body.userId + 'was saved successfully in DB');
-            req.json({
+            res.json({
                 success: true, 
                 message: 'Query Successfully Submitted!'
             }) 
