@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import {useParams} from 'react-router-dom';
 import Navbar from './Navbar';
 import '../index.css';
+import {BiPhoneCall,BiMailSend} from 'react-icons/bi';
+import {CiLocationOn} from 'react-icons/ci';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
 
 
 const ContactPage = () => {
@@ -42,7 +47,8 @@ const ContactPage = () => {
   }
 
   const[contactForm, setContactForm] = useState({
-    name:'',
+    fname:'',
+    sname:'',
     email:'',
     message:''
   })
@@ -56,10 +62,11 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
-    const { name, email, message } = e.target.elements;
+    const { fname, sname, email, message } = e.target.elements;
     let details = {
       userId: userId,
-      name: name.value,
+      fname: fname.value,
+      sname: sname.value,
       email: email.value,
       message: message.value,
     };
@@ -89,36 +96,59 @@ const ContactPage = () => {
     <div className="dark-background" style={divStyle}>
     
       <Navbar />
+      <p className='col-heading'>Contact Us</p>
+      <p className='col-heading2'>Any questions or remarks? Just write us a message!</p>
       <div className="banner">
 
         <div className="col">
           <div style={{display:"block",margin:"10px",padding:"50px",fontSize:"15px",backgroundColor:"black",height:"97%",borderRadius:"1rem"}}>
-            <h2>Contact Information</h2><br/><br/>
+            <h2>Contact Information</h2>
             Contact us incase of any queries!<br/><br/>
             <div>
-              <div>Phone : </div>
-              <div style={{margin:"20px"}}>
+              <div style={{display:"flex"}}>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}><BiPhoneCall size={25}/></div>
+              <div style={{margin:"10px 30px"}}>
+
+                  <table>
+                    <tr><td> +91-9099901124</td></tr>
+                    <tr><td> +91-9099901124</td></tr>
+                  </table>
+              </div></div>
+
+              <div style={{display:"flex", marginTop:"20px"}}>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}><BiMailSend size={25}/></div>
+              <div style={{margin:"10px 30px"}}>
                 <ul>
                   <li><table>
-                    <tr><td>Eshaan :</td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>asmi.bhardwaj2019@vitbhopal.ac.in</td></tr>
+                    <tr><td>eshaan.bahuguna2019@vitbhopal.ac.in</td></tr>
+                    <tr><td>nabiha.khan2019@vitbhopal.ac.in</td></tr>
+                    <tr><td>parth.sarthi2019@vitbhopal.ac.in</td></tr>
                   </table></li>
                 </ul>
-              </div>
-              <div>Email: </div>
-              <div style={{margin:"20px"}}>
-                <ul>
+              </div></div>
+
+
+
+              <div style={{display:"flex", marginTop:"20px"}}>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center'}}><CiLocationOn size={25}/></div>
+              <div style={{margin:"10px 30px"}}>
+              <ul>
                   <li><table>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
-                    <tr><td>Eshaan : </td><td> +91-9099901124</td></tr>
+                    <tr><td>Vit Bhopal University, Kotri Kalan,</td></tr>
+                    <tr><td>Ashta, Near Indore Road, Bhopal,</td></tr>
+                    <tr><td>Madhya Pradesh 466114</td></tr>
                   </table></li>
                 </ul>
-              </div>
-          
+              </div></div>
+
+
+              <div style={{display:"flex", marginTop:"20px"}}>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center',margin:"10px"}}><TwitterIcon size={25}/></div>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center',margin:"10px"}}><InstagramIcon size={25}/></div>
+              <div style={{display:'flex', justifyContent: 'center', alignItems: 'center',margin:"10px"}}><FacebookIcon size={25}/></div></div>
+
+               
 
             </div>
           </div>
@@ -128,19 +158,34 @@ const ContactPage = () => {
 
 
         <div className="col">
-          <p className='col-heading'>Contact Us</p>
-          <form onSubmit={handleSubmit} style={{padding:"1rem", float:"center",margin:"10px",height:"97%"}}>
+          
+          <form onSubmit={handleSubmit} style={{padding:"1rem", float:"center"}}>
             <div>
-              <label name="name" className="form-item" value={contactForm.name} handleChange={setContactFormData}>Name:</label>
-              <input className="form-field" type="text" id="name" required />
+              <label name ="fname" class="custom-field" value={contactForm.fname} handleChange={setContactFormData}>
+                <input type="text" id="fname" placeholder=" " required />
+                <span className="placeholder">First Name</span>
+              </label>
+              <label  name ="sname" class="custom-field" value={contactForm.sname} handleChange={setContactFormData}>
+                <input type="text" id="sname" placeholder=" " required />
+                <span className="placeholder">Last Name</span>
+              </label>
             </div>
+
+
+           
             <div>
-              <label email="email"className="form-item" value={contactForm.email} handleChange={setContactFormData}>Email:</label>
-              <input className="form-field" type="email" id="email" required />
+              <label email="email" className="custom-field" value={contactForm.email} handleChange={setContactFormData}>
+                <input type="email" id="email" placeholder=" " required />
+                <span className="placeholder">Email</span>
+              </label> 
             </div>
+
+            
             <div>
-              <label message="message" className="form-item" value={contactForm.message} handleChange={setContactFormData}>Message:</label>
-              <textarea className="form-field" id="message" required />
+              <label message="message" className="custom-field" value={contactForm.message} handleChange={setContactFormData}>
+                <textarea id="message" placeholder=" " required />
+                <span className="placeholder">Your Message</span>
+              </label>
             </div>
             <button className="btn" type="submit">{status}</button>
             <div className="form-message">{show.message}</div>
