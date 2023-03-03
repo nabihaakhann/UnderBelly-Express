@@ -11,7 +11,6 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 
 const ContactPage = () => {
 
-
   const divStyle = {
     paddingBottom: '3rem',
     display: 'flex', 
@@ -19,11 +18,8 @@ const ContactPage = () => {
     alignItems: 'center'
  }
 
-
   const [status, setStatus] = useState("Submit");
   const {userId} = useParams();
-
-
 
    //show box
   const [show, setShow] = useState({
@@ -47,8 +43,7 @@ const ContactPage = () => {
   }
 
   const[contactForm, setContactForm] = useState({
-    fname:'',
-    sname:'',
+    name: '',
     email:'',
     message:''
   })
@@ -65,8 +60,7 @@ const ContactPage = () => {
     const { fname, sname, email, message } = e.target.elements;
     let details = {
       userId: userId,
-      fname: fname.value,
-      sname: sname.value,
+      name: fname.value + " " + sname.value,
       email: email.value,
       message: message.value,
     };
@@ -96,6 +90,7 @@ const ContactPage = () => {
     <div className="dark-background" style={divStyle}>
     
       <Navbar />
+
       <p className='col-heading'>Contact Us</p>
       <p className='col-heading2'>Any questions or remarks? Just write us a message!</p>
       <div className="banner">
