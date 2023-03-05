@@ -34,7 +34,10 @@ ul{
 
 /* Utility Classes */
 .dark-background{
-  background:url('./assets/images/Dark.jpg') no-repeat center center/cover;
+  background: 
+  /* linear-gradient(to left,rgba(255, 128, 0,0.0),rgba(255, 128, 0,0.0)), */
+  linear-gradient(to top,rgba(255, 128, 0, 0.123),rgba(255, 128, 0,0.0)), 
+   url('./assets/images/Dark.jpg') no-repeat center center/cover;
 }
 
 .card-dark{
@@ -183,6 +186,7 @@ ul{
   margin: 5rem;
 }
 
+
 /* Navbar */
 #navbar{
   /* background:rgb(126, 113, 113); */
@@ -301,3 +305,92 @@ ul{
   margin: 0.5rem;
   cursor: pointer;
 }
+
+#aboutus-wrapper{
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 25% 25% 50%;
+  padding: 40px;
+  margin: 60px auto;
+  width: 120rem;
+}
+#aboutus{
+  border-radius: 10px;
+}
+#aboutushead{
+  font-size: 28px;
+}
+#aboutushead2{
+  font-size: 30px;
+  margin-left: 600px;
+  margin-right: 600px;
+  color: white;
+  
+}
+#aboutus2{
+  margin-top: 100px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+#showmore{
+  background-color: #FF9F0D;
+  color: aliceblue;
+  border-radius: 10px;
+  padding: 20px 40px;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 2rem;
+  margin-left: 500px;
+}
+#chooseus{
+  font-family: 'Poppins';
+  font-size: 7rem;
+  font-weight: 400;
+}
+#icons{
+  color: white;
+  height: 200px;
+  font-weight: 600;
+  width: 200px;
+  block-size: 150px;
+  border-radius: 10px;
+  margin-bottom: 5rem;
+  text-align: center;
+  font-size: 25px;
+  margin-top: 5rem;
+  margin-right: 250px;
+  margin-left: 250px;
+}
+#meetourdev{
+  border-radius: 10px;
+  opacity: 0.2;
+  position: relative;
+  text-align: center;
+  color: white;
+}
+#overlay{
+  background: #FF9F0D;
+  border-radius: 10px;
+}
+h1{
+  font-size: 7rem;
+  font-family: 'La Belle Aurore', cursive;
+  font-weight: 400;
+}
+#polaroid{
+  width: 380px;
+  /* height: 700px; */
+  /* padding: 50px; */
+  block-size: 120px;
+  margin-bottom: 5rem;
+  text-align: center;
+  font-size: 25px;
+  /* margin-top: 0rem; */
+  color: #262A31;
+  align-content: left;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+
