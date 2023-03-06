@@ -9,7 +9,6 @@ import Search from './components/Search';
 import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
 
 function App() {
-  const {searchQuery} = useParams();
 
   const router = createBrowserRouter([
     {
@@ -22,36 +21,37 @@ function App() {
       element: <HomePage />,
       errorElement: <ErrorPage />,
       children: [
-        {
-          path: 'Pastries',
-          element: <CategoryItems searchParam='Pastries' />
-        },
-        {
-          path: 'Pasta and Pizza',
-          element: <CategoryItems searchParam='Pasta and Pizza' />
-        },
-        {
-          path: 'Sandwiches and Burgers',
-          element: <CategoryItems searchParam='Sandwiches and Burgers' />
-        },
-        {
-          path: 'Starters',
-          element: <CategoryItems searchParam='Starters' />
-        },
-        {
-          path: 'Main Course',
-          element: <CategoryItems searchParam='Main Course' />
-        },
-        {
-          path: 'Beverages',
-          element: <CategoryItems searchParam='Beverages' />
-        },
-        {
-          path: 'search/:searchQuery',
-          element: <Search searchQuery={searchQuery}/>
-        }
+        
+        // {
+        //   path: `/${userId}/search/${searchQuery}`,
+        //   element: <Search searchQuery={searchQuery}/>
+        // }
       ]
     }, 
+    {
+      path: '/:userId/Pastries',
+      element: <CategoryItems searchParam='Pastries' />
+    },
+    {
+      path: '/:userId/Pasta and Pizza',
+      element: <CategoryItems searchParam='Pasta & Pizza' />
+    },
+    {
+      path: '/:userId/Sandwiches and Burgers',
+      element: <CategoryItems searchParam='Sandwiches & Burgers' />
+    },
+    {
+      path: '/:userId/Starters',
+      element: <CategoryItems searchParam='Starters' />
+    },
+    {
+      path: '/:userId/Main Course',
+      element: <CategoryItems searchParam='Main Course' />
+    },
+    {
+      path: '/:userId/Beverages',
+      element: <CategoryItems searchParam='Beverages' />
+    },
     {
       path: '/:adminId/admin', 
       element: <AdminPage />

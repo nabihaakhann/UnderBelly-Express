@@ -19,7 +19,7 @@ export default function Navbar(){
     }, [])
 
     function handleSearchChange(key, value){
-        console.log(key, value);
+        // console.log(key, value);
         if(key === 'Enter'){
             if(search.length === 0){
                 alert('Search Query cannot be Empty!');
@@ -29,13 +29,12 @@ export default function Navbar(){
                 .then(response => response.json())
                 .then(response => {
                     if(response.success){
-                        navigate(`/search/${search}`);
+                        navigate(`/${userId}/search/${search}`);
                     }
                 })
             }
         }
         else if(value){
-            // console.log('else block working')
             setSearch(value);
         }
         else if(value !== null){
