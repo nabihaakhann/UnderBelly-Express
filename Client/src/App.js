@@ -4,16 +4,13 @@ import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage/AdminPage';
 import ErrorPage from './components/ErrorPage';
 import CategoryItems from './components/CategoryItems';
+import Search from './components/Search';
 
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
 
 function App() {
-  // // Testing if the server is accepting any requests or not
-  // useEffect(()=>{
-  //   fetch('/api')
-  //   .then(response => response.text())
-  //   .then(text => console.log(text))
-  // }, []);
+  const {searchQuery} = useParams();
+
   const router = createBrowserRouter([
     {
       path: '/', 
@@ -48,6 +45,10 @@ function App() {
         {
           path: 'Beverages',
           element: <CategoryItems searchParam='Beverages' />
+        },
+        {
+          path: 'search/:searchQuery',
+          element: <Search searchQuery={searchQuery}/>
         }
       ]
     }, 

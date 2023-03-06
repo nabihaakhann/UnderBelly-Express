@@ -1,20 +1,49 @@
 import SearchIcon from '@mui/icons-material/Search';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import {useParams} from 'react-router-dom'
-import { useLayoutEffect, useState, useEffect } from 'react';
+import {useParams, useNavigate} from 'react-router-dom'
+import { useLayoutEffect, useState } from 'react';
 
 import SidePanel from './Side Panel/SidePanel';
 
 export default function Navbar(){
     const {userId} = useParams();
+    const navigate = useNavigate();
 
     const [userInfo, setUserInfo] = useState(null);
+    const [search, setSearch] = useState('');
 
     const [showSidePanel, setSidePanel] = useState(false);
 
     useLayoutEffect(()=>{
         loadUserData();
     }, [])
+
+    function handleSearchChange(key, value){
+        console.log(key, value);
+        if(key === 'Enter'){
+            if(search.length === 0){
+                alert('Search Query cannot be Empty!');
+            }
+            else{
+                fetch(`/search/${search}`)
+                .then(response => response.json())
+                .then(response => {
+                    if(response.success){
+                        navigate(`/search/${search}`);
+                    }
+                })
+            }
+        }
+        else if(value){
+            // console.log('else block working')
+            setSearch(value);
+        }
+        else if(value !== null){
+            if(value.length === 0){
+                setSearch('');
+            }
+        }
+    }
 
     async function loadUserData(){
         const response = await fetch(`/${userId}/userData`);
@@ -36,7 +65,14 @@ export default function Navbar(){
                 <div className='row-alignment'>
                     {/* Search Bar */}
                     <div id='search-bar-wrapper'>
-                        <input type='text' id="search-bar" placeholder="What do you want to eat?" />
+                        <input 
+                            type='text' 
+                            id="search-bar" 
+                            placeholder="What do you want to eat?" 
+                            value={search} 
+                            onKeyDown={event => handleSearchChange(event.code, null)}
+                            onChange={event => handleSearchChange(null, event.target.value)}
+                        />
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
 

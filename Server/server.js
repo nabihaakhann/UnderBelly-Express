@@ -63,6 +63,7 @@ const Product = mongoose.model('Product', {
     ]
 })
 
+
 // GET REQUESTS
 
 // Home Page
@@ -123,6 +124,42 @@ app.get('/:userId/userData', (req, res)=>{
             }
             else{
                 console.log('No user with id ' + req.params.userId + ' was found');
+            }
+
+            res.json(response);
+        }
+    })
+})
+
+app.get('search/:searchQuery', (req, res)=>{
+    console.log(req.params);
+
+    Product.findOne({'items.name': req.params.searchQuery}, {'items.$': 1}, (err, foundItem)=>{
+        if(!err){
+            const response = {
+                itemData: null
+            }
+            if(foundItem){
+                // console.log(foundItem)
+
+                const itemDetails = foundItem.items[0];
+    
+                console.log('Item Details with name: ' + req.params.menuItem);
+                response.itemData = {
+                    id: itemDetails._id,
+                    name: itemDetails.name, 
+                    description: itemDetails.description, 
+                    currentRating: itemDetails.currentRating, 
+                    price: itemDetails.price,
+                    itemImage: itemDetails.itemImage.toString('base64'),
+                    imageType: itemDetails.imageType
+                };
+                
+                console.log(response.itemData);
+                console.log('Item details sent back to client');
+            }
+            else{
+                console.log('Search Query: ' + req.params.searchQuery + ' Not Found!');
             }
 
             res.json(response);
