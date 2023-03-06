@@ -230,14 +230,17 @@ ul{
 
 #navbar > div:last-child li{
   padding: 1rem;
+}
+
+.navbar-links{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
   margin: 0 1rem;
 }
-
-#navbar > div:last-child li:hover{
+.navbar-links:hover{
   color: #E4905C;
   cursor: pointer;
 }

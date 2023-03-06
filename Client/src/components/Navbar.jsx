@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
-import {useParams, useNavigate} from 'react-router-dom'
+import {useParams, useNavigate, Link} from 'react-router-dom'
 import { useLayoutEffect, useState } from 'react';
 
 import SidePanel from './Side Panel/SidePanel';
@@ -77,16 +77,48 @@ export default function Navbar(){
                     </div>
 
                     <ul className='row-alignment'>
-                        <li> <BookmarkBorderOutlinedIcon /> Menu</li>
-                        <li> <BookmarkBorderOutlinedIcon /> My Cart</li>
-                        <li> <BookmarkBorderOutlinedIcon /> About Us</li>
+                        <li> 
+                            <Link to={`/${userId}/categories`} style={{textDecoration: 'none', color: 'white'}}>
+                                <div className='navbar-links'>
+                                    <BookmarkBorderOutlinedIcon /> 
+                                    <p>Menu </p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li> 
+                            <Link to={`/${userId}/about`} style={{textDecoration: 'none', color: 'white'}}>
+                                <div className='navbar-links'>
+                                    <BookmarkBorderOutlinedIcon /> 
+                                    <p>About Us </p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li> 
+                            <Link to={`/${userId}/contact`} style={{textDecoration: 'none', color: 'white'}}>
+                                <div className='navbar-links'>
+                                    <BookmarkBorderOutlinedIcon /> 
+                                    <p>Contact </p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li> 
+                            <Link to={`/${userId}/cart`} style={{textDecoration: 'none', color: 'white'}}>
+                                <div className='navbar-links'>
+                                    <BookmarkBorderOutlinedIcon /> 
+                                    <p>My Cart</p>
+                                </div>
+                            </Link>
+                        </li>
+
                         {userInfo && 
                             <li onClick={displaySidePanel}>
-                                <img 
-                                    src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
-                                    style={{height: '2.5rem', width: '2.5rem', cursor:'pointer'}}
-                                />
-                                <p>Me</p>
+                                <div className='navbar-links'>
+                                    <img 
+                                        src={`data:${userInfo.imageType};base64,${userInfo.userImage}`}
+                                        style={{height: '2.5rem', width: '2.5rem', cursor:'pointer'}}
+                                    />
+                                    <p>Me</p>
+                                </div>
                             </li>
                         }
                     </ul>
