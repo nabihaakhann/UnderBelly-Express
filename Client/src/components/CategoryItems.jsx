@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ImageCard } from "../ui/ui";
+import Navbar from "./Navbar";
 
 export default function CategoryItems({searchParam}){
     const [items, setItems] = useState([]);
@@ -16,13 +17,18 @@ export default function CategoryItems({searchParam}){
     }, [searchParam]);
 
     return (
-        <div id="category-items">
-            {items.map(item => {
-                return <ImageCard 
-                    itemData = {item}
-                    key={item._id}
-                />
-            })}
+        <div className="dark-background column-alignment">
+            <Navbar />
+
+            <p className="heading">{searchParam}</p>
+            <div id="category-items">
+                {items.map(item => {
+                    return <ImageCard 
+                        itemData = {item}
+                        key={item._id}
+                    />
+                })}
+            </div>
         </div>
     )
 }
