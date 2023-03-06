@@ -22,18 +22,12 @@ const ContactPage = () => {
   const {userId} = useParams();
 
    //show box
-  const [show, setShow] = useState({
-    text: '', 
-    display: false
-  }); 
+  const [show, setShow] = useState(""); 
 
-  const clearShow=()=>{
+  const clear=()=>{
     setTimeout(()=>{
-       setShow({
-            text: '', 
-            display: false
-        })
-    }, 1000);
+       setShow("")
+    }, 700);
   }
   function displayShow(text){
     setShow({
@@ -63,6 +57,7 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
+    
     const { fname, sname, email, message } = e.target.elements;
     let details = {
       userId: userId,
@@ -79,12 +74,23 @@ const ContactPage = () => {
       },
       body: JSON.stringify(details),
     });
+    setShow("Thank you for submission!");
+    setContactForm({
+      fname: '',
+      sname: '',
+      email:'',
+      message:''
+    });
+    setTimeout(()=>{
+      setStatus("Submit")
+   }, 700);
+    clear();
+
     
-    setStatus("Submit");
-    displayShow("Your response has been submitted");
+    // displayShow("Your response has been submitted");
     let result = await response.json();
-    alert(result.message);
-    clearShow("");
+    //alert(result.message);
+    // clearShow("");
 
   };
   
@@ -189,7 +195,7 @@ const ContactPage = () => {
               </label>
             </div>
             <button className="btn" type="submit">{status}</button>
-            <div className="form-message">{show.message}</div>
+            <div className="form-message">{show}</div>
           </form>
         </div>
         
