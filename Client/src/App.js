@@ -4,7 +4,7 @@ import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage/AdminPage';
 import ErrorPage from './components/ErrorPage';
 import CategoryItems from './components/CategoryItems';
-import Search from './components/Search';
+import ContactPage from './components/Contacts';
 
 import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
 
@@ -55,7 +55,12 @@ function App() {
     {
       path: '/:adminId/admin', 
       element: <AdminPage />
+    },
+    {
+      path: '/:userId/contact',
+      element: <ContactPage />
     }
+
   ])  
 
   return (

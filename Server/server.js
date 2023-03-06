@@ -63,6 +63,12 @@ const Product = mongoose.model('Product', {
     ]
 })
 
+//contact form
+const Contact = mongoose.model('contact-queries', {
+    name: String, 
+    message: String,
+    email: String
+})
 
 // GET REQUESTS
 
@@ -381,6 +387,27 @@ app.post('/addNewAddress', (req, res)=>{
     })
 })
 
+//Contact Page
+app.post('/contact', (req, res) => {
+    console.log(req.body);
+
+    const newQuery = new Contact({
+        email: req.body.email, 
+        name: req.body.name, 
+        message: req.body.message
+    })
+
+    newQuery.save((err) => {
+        if(!err){
+            console.log('The Contact Query made by user: ' + req.body.userId + ' was saved successfully in DB');
+            res.json({
+                success: true, 
+                message: 'Query Successfully Submitted!'
+            }) 
+        }
+    })
+})
+
 // Admin Page
 app.post('/addCategory', (req, res)=>{
     console.log(req.body);
@@ -600,6 +627,11 @@ app.delete('/deleteMenuItem/:id', (req, res)=>{
         }
     })
 })
+
+
+
+
+
 
 app.listen(5000, ()=>{
     console.log('The Server is running on port 5000');
