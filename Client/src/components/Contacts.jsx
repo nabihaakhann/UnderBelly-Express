@@ -43,14 +43,20 @@ const ContactPage = () => {
   }
 
   const[contactForm, setContactForm] = useState({
-    name: '',
+    fname: '',
+    sname: '',
     email:'',
     message:''
   })
 
 
-  const setContactFormData = (event) =>{
-    setContactForm(event.target.value);
+  const setContactFormData = (name,value) =>{
+    setContactForm(prevData => {
+      return {
+          ...prevData, 
+          [name]: value
+      }
+  })
   };
 
 
@@ -156,12 +162,12 @@ const ContactPage = () => {
           
           <form onSubmit={handleSubmit} style={{padding:"1rem", float:"center"}}>
             <div>
-              <label name ="fname" class="custom-field" value={contactForm.fname} handleChange={setContactFormData}>
-                <input type="text" id="fname" placeholder=" " required />
+              <label name ="fname" class="custom-field">
+                <input type="text" id="fname" placeholder=" " value={contactForm.fname} onChange={event => setContactFormData("fname",event.target.value)} required />
                 <span className="placeholder">First Name</span>
               </label>
-              <label  name ="sname" class="custom-field" value={contactForm.sname} handleChange={setContactFormData}>
-                <input type="text" id="sname" placeholder=" " required />
+              <label  name ="sname" class="custom-field">
+                <input type="text" id="sname" placeholder=" "  value={contactForm.sname} onChange={event => setContactFormData("sname",event.target.value)} required />
                 <span className="placeholder">Last Name</span>
               </label>
             </div>
@@ -169,16 +175,16 @@ const ContactPage = () => {
 
            
             <div>
-              <label email="email" className="custom-field" value={contactForm.email} handleChange={setContactFormData}>
-                <input type="email" id="email" placeholder=" " required />
+              <label email="email" className="custom-field">
+                <input type="email" id="email" placeholder=" " value={contactForm.email} onChange={event => setContactFormData("email",event.target.value)} required />
                 <span className="placeholder">Email</span>
               </label> 
             </div>
 
             
             <div>
-              <label message="message" className="custom-field" value={contactForm.message} handleChange={setContactFormData}>
-                <textarea id="message" placeholder=" " required />
+              <label message="message" className="custom-field">
+                <textarea id="message" placeholder=" " value={contactForm.message} onChange={event => setContactFormData("message",event.target.value)} required />
                 <span className="placeholder">Your Message</span>
               </label>
             </div>
