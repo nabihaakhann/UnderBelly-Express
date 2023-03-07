@@ -290,6 +290,19 @@ app.get('/userQueries', (req, res)=>{
     })
 })
 
+app.get('/userStatistics', (req, res)=>{
+    User.countDocuments({}, (err, count)=> {
+        if(!err){
+            res.json({
+                success: true, 
+                stats: {
+                    user: count
+                }
+            })
+        }
+    })
+})
+
 // POST REQUESTS
 
 // Login & Register Page
