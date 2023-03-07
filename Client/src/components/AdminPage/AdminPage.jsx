@@ -1,6 +1,8 @@
 import { Heading, Colors} from "../../ui/ui";
 import MenuItemCard from "./MenuItemsCard";
 import Search from "./Search";
+import UserQueries from './UserQueries';
+import UserStatistics from './UserStatistics';
 
 import { useEffect, useState } from "react";
 
@@ -48,31 +50,26 @@ export default function AdminPage(){
             padding: '2rem',
             height: '20rem', 
             gap: '2rem'
-        },
-        columnAlignment: {
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center'
         }, 
-        rowAlignment: {
-            display: 'flex', 
-            justifyContent: 'space-between'
+        userStatisticsWrapper: {
+            margin: '3rem auto', 
+            width: '80rem',  
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(4, 1fr)', 
+            gap: '2rem'
         }
-        
     }
 
     return (
         <div id="admin-page">
             {/* Needs to be implemented fully once other features are working properly */}
-            <div style={{margin: 'auto', width: '80rem', paddingTop: '3rem'}}>
-                <div className="card-light" style={{ minHeight: '16rem'}}>
-                    {/* Displays User-Related Data */}
-                    <Heading>User Statistics</Heading>
-                </div>
+            <div style={styles.userStatisticsWrapper}>
+                {/* User Statistics section */}
+                <UserStatistics />
             </div>
 
-            {/*  Add Categories & Menu Items  */}
             <div style={styles.gridStyle}>
+                {/*  Add Categories & Menu Items  */}
                 <MenuItemCard 
                     showAlert={showAlert}
                     displayAlert={displayAlert}
@@ -86,8 +83,7 @@ export default function AdminPage(){
                 />
 
                 {/* User Queries section */}
-                <div className="card-light" style={styles.columnAlignment}>
-                </div>
+                <UserQueries />
             </div>
         </div>
     )

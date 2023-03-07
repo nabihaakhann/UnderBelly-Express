@@ -34,7 +34,7 @@ ul{
 
 /* Utility Classes */
 .dark-background{
-  background:url('./assets/images/Dark.jpg') no-repeat center center/cover;
+  background: linear-gradient(to top,rgba(255, 128, 0, 0.123),rgba(255, 128, 0,0.0)), url('./assets/images/Dark.jpg') no-repeat center center/cover;
 }
 
 .card-dark{
@@ -161,7 +161,9 @@ ul{
 
 /* Login Page */
 #login-page{
-  background: url('./assets/images/Login\ Page\ Edited.png') no-repeat center bottom/cover;
+  background: linear-gradient(to top,rgba(255, 128, 0,0.0),rgba(255, 128, 0,0.0)),
+  linear-gradient(to right,rgb(255, 128, 0,0.2),rgba(255, 128, 0,0.0)), 
+   url('./assets/images/Login\ Page\ Edited.png') no-repeat center bottom/cover;
 }
 
 .form-wrapper{
@@ -306,9 +308,28 @@ ul{
   cursor: pointer;
 }
 
+#user-queries-wrapper{
+  height: 50rem;
+  overflow: scroll;
+  padding: 0 1rem;
+  width: 100%;
+}
 
-/*contact page*/
+.user-query{
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
 
+/* Admin All Items Page */
+.items-section{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3rem 2rem;
+}
+
+
+/*Contact page*/
 .btn{
   background-color: #000;
   color: white;
@@ -376,9 +397,6 @@ ul{
   font-family: 'Poppins';
   justify-content: center;
 }
-
-
-
 
 *, *::before, *::after {
   box-sizing: border-box;

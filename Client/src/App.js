@@ -5,8 +5,10 @@ import AdminPage from './components/AdminPage/AdminPage';
 import ErrorPage from './components/ErrorPage';
 import CategoryItems from './components/CategoryItems';
 import ContactPage from './components/Contacts';
+import AllItemsPage from './components/AdminPage/AllItemsPage';
 
 import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
+import Search from './components/AdminPage/Search';
 
 function App() {
 
@@ -57,10 +59,17 @@ function App() {
       element: <AdminPage />
     },
     {
+      path: '/:admin/allItems', 
+      element: <AllItemsPage />
+    },
+    {
       path: '/:userId/contact',
       element: <ContactPage />
+    }, 
+    {
+      path: '/:userId/search/:searchQuery', 
+      element: <CategoryItems />
     }
-
   ])  
 
   return (

@@ -137,20 +137,22 @@ app.get('/:userId/userData', (req, res)=>{
     })
 })
 
-app.get('search/:searchQuery', (req, res)=>{
+app.get('/search/:searchQuery', (req, res)=>{
     console.log(req.params);
 
     Product.findOne({'items.name': req.params.searchQuery}, {'items.$': 1}, (err, foundItem)=>{
         if(!err){
             const response = {
-                itemData: null
+                itemData: null, 
+                success: false
             }
             if(foundItem){
                 // console.log(foundItem)
 
                 const itemDetails = foundItem.items[0];
     
-                console.log('Item Details with name: ' + req.params.menuItem);
+                console.log('Item Details with name: ' + req.params.searchQuery);
+                response.success = true;
                 response.itemData = {
                     id: itemDetails._id,
                     name: itemDetails.name, 
@@ -179,6 +181,46 @@ app.get('/allCategories', (req, res)=>{
         if(!err){
             console.log('All Categories sent to Client');
             res.json(result);
+        }
+    })
+})
+
+app.get('/allItems', (req, res)=>{
+    Product.find({}, (err, allCategories)=>{
+        if(!err){
+            // console.log(allCategories);
+            // Preprocessing for ItemImage for each item in a Category
+            const categories = allCategories.map(category => {
+                const categoryObject = {
+                    id: '',
+                    category: '', 
+                    items: []
+                }
+
+                categoryObject.id = category._id;
+                categoryObject.category = category.category;
+
+                category.items.forEach(item => {
+                    const obj = {
+                        id: item._id,
+                        name: item.name, 
+                        description: item.description, 
+                        currentRating: item.currentRating, 
+                        price: item.price, 
+                        imageType: item.imageType, 
+                        itemImage: item.itemImage.toString('base64')
+                    }
+                    
+                    categoryObject.items.push(obj);
+
+                    // item.imageType = item.imageType.toString('base64');
+                })
+                
+                return categoryObject;
+            })
+
+            res.json({success: true, categories: categories});
+            console.log('All Menu Items data sent back to Admin');
         }
     })
 })
@@ -239,6 +281,27 @@ app.get('/getMenuItem/:menuItem', (req, res)=>{
     })
 })
 
+app.get('/userQueries', (req, res)=>{
+    Contact.find({}, (err, foundQueries)=>{
+        if(!err){
+            res.json({success: true, queries: foundQueries});
+            console.log('User Queries sent back to Admin');
+        }
+    })
+})
+
+app.get('/userStatistics', (req, res)=>{
+    User.countDocuments({}, (err, count)=> {
+        if(!err){
+            res.json({
+                success: true, 
+                stats: {
+                    user: count
+                }
+            })
+        }
+    })
+})
 
 // POST REQUESTS
 
@@ -623,6 +686,28 @@ app.delete('/deleteMenuItem/:id', (req, res)=>{
                 console.log('Menu Item with id: ' + req.params.id + ' not found in DB');
             }
 
+            res.json(response);
+        }
+    })
+})
+
+app.delete('/deleteQuery/:id', (req, res)=>{
+    console.log(req.params);
+
+    Contact.findByIdAndDelete(req.params.id, (err, foundQuery)=>{
+        if(!err){
+            const response = {
+                success: false
+            }
+
+            if(foundQuery){
+                response.success = true;
+                console.log('Query with id: ' + req.params.id + ' successfully deleted from DB');
+            }
+            else{
+                console.log('Query with id: ' + req.params.id + 'not found!');
+            }
+            
             res.json(response);
         }
     })

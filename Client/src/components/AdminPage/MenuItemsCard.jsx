@@ -3,6 +3,7 @@ import { TextField, Button, Alert } from "@mui/material";
 
 import { useState } from "react";
 import CategorySection from "./CategorySection";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function MenuItemCard({showAlert, displayAlert, clearAlert, editItemDetails}){
     const [addMenuItemFormData, setAddMenuFormData] = useState({
@@ -16,6 +17,9 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert, editI
         name: 'None', 
         file: ''
     });
+
+    const navigate = useNavigate();
+    const {userId} = useParams();
 
     editItemDetails && function(){
         
@@ -156,14 +160,14 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert, editI
                     </div>
 
                     <div style={{alignSelf: 'center'}}>
-                    <p style={styles.imageNameStyle}>{
-                        (function(){
-                            if(menuItemImage.name.length > 20){
-                                return `${menuItemImage.name.substring(0, 20)}...`
-                            }
-                            return menuItemImage.name;
-                        })()
-                    }</p>
+                        <p style={styles.imageNameStyle}>{
+                            (function(){
+                                if(menuItemImage.name.length > 20){
+                                    return `${menuItemImage.name.substring(0, 20)}...`
+                                }
+                                return menuItemImage.name;
+                            })()
+                        }</p>
                         <Button variant="text" component='label'>
                             Upload Image
                             <input type='file' accept='.jpeg, .png, .jpg' hidden onChange={event => {
@@ -212,15 +216,26 @@ export default function MenuItemCard({showAlert, displayAlert, clearAlert, editI
                 </div>
 
                 <div style={styles.rowAlignment}>
-                    <Button 
-                        variant="text" 
-                        onClick={onClearButtonPress}
-                    >Clear</Button>
-                    <Button 
-                        variant="contained" 
-                        color='primary'
-                        onClick={onAddItemButtonPress}
-                    >Add Item</Button>
+                    <div>
+                        <Button 
+                            variant="text" 
+                            onClick={onClearButtonPress}
+                        >Clear</Button>
+                    </div>
+
+                    <div className="column-alignment">
+                        <Button 
+                            variant="contained" 
+                            color='primary'
+                            onClick={onAddItemButtonPress}
+                        >Add Item</Button>
+                        <Button
+                            variant="outlined"
+                            color="success"
+                            onClick={()=> navigate(`/${userId}/allItems`)}
+                            style={{marginTop: '1rem'}}
+                        >Show All Items</Button>
+                    </div>
                 </div>
 
                 <div style={{margin: '1rem', width: '100%'}}>
