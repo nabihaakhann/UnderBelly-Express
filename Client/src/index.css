@@ -34,7 +34,7 @@ ul{
 
 /* Utility Classes */
 .dark-background{
-  background:url('./assets/images/Dark.jpg') no-repeat center center/cover;
+  background: linear-gradient(to top,rgba(255, 128, 0, 0.123),rgba(255, 128, 0,0.0)), url('./assets/images/Dark.jpg') no-repeat center center/cover;
 }
 
 .card-dark{
