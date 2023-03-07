@@ -137,20 +137,22 @@ app.get('/:userId/userData', (req, res)=>{
     })
 })
 
-app.get('search/:searchQuery', (req, res)=>{
+app.get('/search/:searchQuery', (req, res)=>{
     console.log(req.params);
 
     Product.findOne({'items.name': req.params.searchQuery}, {'items.$': 1}, (err, foundItem)=>{
         if(!err){
             const response = {
-                itemData: null
+                itemData: null, 
+                success: false
             }
             if(foundItem){
                 // console.log(foundItem)
 
                 const itemDetails = foundItem.items[0];
     
-                console.log('Item Details with name: ' + req.params.menuItem);
+                console.log('Item Details with name: ' + req.params.searchQuery);
+                response.success = true;
                 response.itemData = {
                     id: itemDetails._id,
                     name: itemDetails.name, 

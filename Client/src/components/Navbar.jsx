@@ -25,13 +25,7 @@ export default function Navbar(){
                 alert('Search Query cannot be Empty!');
             }
             else{
-                fetch(`/search/${search}`)
-                .then(response => response.json())
-                .then(response => {
-                    if(response.success){
-                        navigate(`/${userId}/search/${search}`);
-                    }
-                })
+                navigate(`/${userId}/search/${search}`);
             }
         }
         else if(value){

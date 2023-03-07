@@ -7,6 +7,7 @@ import CategoryItems from './components/CategoryItems';
 import ContactPage from './components/Contacts';
 
 import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
+import Search from './components/AdminPage/Search';
 
 function App() {
 
@@ -59,8 +60,11 @@ function App() {
     {
       path: '/:userId/contact',
       element: <ContactPage />
+    }, 
+    {
+      path: '/:userId/search/:searchQuery', 
+      element: <CategoryItems />
     }
-
   ])  
 
   return (
