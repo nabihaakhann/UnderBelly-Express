@@ -307,7 +307,7 @@ ul{
 }
 
 #user-queries-wrapper{
-  height: 53rem;
+  height: 50rem;
   overflow: scroll;
   padding: 0 1rem;
   width: 100%;
@@ -317,6 +317,13 @@ ul{
   padding: 1rem;
   margin-top: 1rem;
   width: 100%;
+}
+
+/* Admin All Items Page */
+.items-section{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3rem 2rem;
 }
 
 

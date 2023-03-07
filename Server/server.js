@@ -185,6 +185,46 @@ app.get('/allCategories', (req, res)=>{
     })
 })
 
+app.get('/allItems', (req, res)=>{
+    Product.find({}, (err, allCategories)=>{
+        if(!err){
+            // console.log(allCategories);
+            // Preprocessing for ItemImage for each item in a Category
+            const categories = allCategories.map(category => {
+                const categoryObject = {
+                    id: '',
+                    category: '', 
+                    items: []
+                }
+
+                categoryObject.id = category._id;
+                categoryObject.category = category.category;
+
+                category.items.forEach(item => {
+                    const obj = {
+                        id: item._id,
+                        name: item.name, 
+                        description: item.description, 
+                        currentRating: item.currentRating, 
+                        price: item.price, 
+                        imageType: item.imageType, 
+                        itemImage: item.itemImage.toString('base64')
+                    }
+                    
+                    categoryObject.items.push(obj);
+
+                    // item.imageType = item.imageType.toString('base64');
+                })
+                
+                return categoryObject;
+            })
+
+            res.json({success: true, categories: categories});
+            console.log('All Menu Items data sent back to Admin');
+        }
+    })
+})
+
 app.get('/admin/getUserData/:email', (req, res)=> {
     console.log(req.params)
 

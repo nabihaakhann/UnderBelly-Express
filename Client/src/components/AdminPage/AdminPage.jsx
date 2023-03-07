@@ -63,8 +63,8 @@ export default function AdminPage(){
                 </div>
             </div>
 
-            {/*  Add Categories & Menu Items  */}
             <div style={styles.gridStyle}>
+                {/*  Add Categories & Menu Items  */}
                 <MenuItemCard 
                     showAlert={showAlert}
                     displayAlert={displayAlert}
