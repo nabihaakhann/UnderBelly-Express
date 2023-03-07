@@ -1,6 +1,7 @@
 import { Heading, Colors} from "../../ui/ui";
 import MenuItemCard from "./MenuItemsCard";
 import Search from "./Search";
+import UserQueries from './UserQueries';
 
 import { useEffect, useState } from "react";
 
@@ -48,15 +49,6 @@ export default function AdminPage(){
             padding: '2rem',
             height: '20rem', 
             gap: '2rem'
-        },
-        columnAlignment: {
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center'
-        }, 
-        rowAlignment: {
-            display: 'flex', 
-            justifyContent: 'space-between'
         }
         
     }
@@ -86,8 +78,7 @@ export default function AdminPage(){
                 />
 
                 {/* User Queries section */}
-                <div className="card-light" style={styles.columnAlignment}>
-                </div>
+                <UserQueries />
             </div>
         </div>
     )

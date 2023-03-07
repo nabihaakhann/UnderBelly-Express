@@ -241,6 +241,14 @@ app.get('/getMenuItem/:menuItem', (req, res)=>{
     })
 })
 
+app.get('/userQueries', (req, res)=>{
+    Contact.find({}, (err, foundQueries)=>{
+        if(!err){
+            res.json({success: true, queries: foundQueries});
+            console.log('User Queries sent back to Admin');
+        }
+    })
+})
 
 // POST REQUESTS
 
@@ -625,6 +633,28 @@ app.delete('/deleteMenuItem/:id', (req, res)=>{
                 console.log('Menu Item with id: ' + req.params.id + ' not found in DB');
             }
 
+            res.json(response);
+        }
+    })
+})
+
+app.delete('/deleteQuery/:id', (req, res)=>{
+    console.log(req.params);
+
+    Contact.findByIdAndDelete(req.params.id, (err, foundQuery)=>{
+        if(!err){
+            const response = {
+                success: false
+            }
+
+            if(foundQuery){
+                response.success = true;
+                console.log('Query with id: ' + req.params.id + ' successfully deleted from DB');
+            }
+            else{
+                console.log('Query with id: ' + req.params.id + 'not found!');
+            }
+            
             res.json(response);
         }
     })

@@ -306,9 +306,21 @@ ul{
   cursor: pointer;
 }
 
+#user-queries-wrapper{
+  height: 53rem;
+  overflow: scroll;
+  padding: 0 1rem;
+  width: 100%;
+}
 
-/*contact page*/
+.user-query{
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
 
+
+/*Contact page*/
 .btn{
   background-color: #000;
   color: white;
@@ -376,9 +388,6 @@ ul{
   font-family: 'Poppins';
   justify-content: center;
 }
-
-
-
 
 *, *::before, *::after {
   box-sizing: border-box;
