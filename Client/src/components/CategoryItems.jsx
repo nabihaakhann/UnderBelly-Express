@@ -36,7 +36,7 @@ export default function CategoryItems({searchParam}){
     }, [searchParam, searchQuery]);
 
     return (
-        <div className="dark-background column-alignment">
+        <div className="dark-background column-alignment" style={{paddingBottom: '3rem'}}>
             <Navbar />
 
             <p className="heading">{searchQuery ? 'Result for ' + searchQuery: searchParam}</p>

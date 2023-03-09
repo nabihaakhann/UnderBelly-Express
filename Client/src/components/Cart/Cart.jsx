@@ -12,17 +12,41 @@ import CartFooter from './CartFooter';
 const CartPage=()=> {
     const {userId} = useParams();
 
-    const localStorageItems = localStorage.getItem('cart');
-    const [cartItems, setCartItems] = useState(localStorageItems);
-
-    useEffect(()=>{
-        
-    }, [cartItems])
-
+    const [cartItems, setCartItems] = useState([]);
+    
     useEffect(()=>{
         document.title = 'UnderBelly Express | My Cart';
+
+        const cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+        setCartItems(cart);
     },[])
 
+    function deleteCartItem(id){
+        const cart = JSON.parse(localStorage.getItem('cart'));
+
+        const result = cart.filter(item => item._id !== id);
+
+        localStorage.setItem('cart', JSON.stringify(result));
+        setCartItems(result);
+    }
+
+    function handleQuantityChange(id, operation){
+        const result = JSON.parse(localStorage.getItem('cart')).map(item => {
+            if(item._id === id){
+                if(operation === 'add'){
+                    item.quantity = item.quantity + 1;
+                }
+                else{
+                    item.quantity = item.quantity - 1;
+                }
+            }
+
+            return item;
+        })
+
+        localStorage.setItem('cart', JSON.stringify(result));
+        setCartItems(result);
+    }
 
   return (
     <>
@@ -44,7 +68,14 @@ const CartPage=()=> {
                 </div>
 
                 <div className="products">
-                    <CartItem />
+                    {cartItems.map(item => {
+                        return <CartItem 
+                                itemData={item}
+                                deleteCartItem={deleteCartItem}
+                                handleQuantityChange={handleQuantityChange}
+                                key={item._id}
+                            />
+                    })}
                 </div>
                 <div style={{textAlign: 'center', margin: '1rem'}}>
                     <Link to={`/${userId}/categories`} style={{textDecoration: 'none', color: 'inherit'}}>
@@ -58,7 +89,7 @@ const CartPage=()=> {
                 </div>  
             </section>
 
-            <CartFooter />
+            <CartFooter items={cartItems}/>
         </div>
     </>
     

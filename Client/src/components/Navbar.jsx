@@ -1,4 +1,4 @@
-import SearchIcon from '@mui/icons-material/Search';
+import { Badge } from '@mui/material';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import {useParams, useNavigate, Link} from 'react-router-dom'
 import { useLayoutEffect, useState } from 'react';
@@ -97,8 +97,10 @@ export default function Navbar(){
                         <li> 
                             <Link to={`/${userId}/cart`} style={{textDecoration: 'none', color: 'white'}}>
                                 <div className='navbar-links'>
-                                    <BookmarkBorderOutlinedIcon /> 
-                                    <p>My Cart</p>
+                                    {/* <Badge variant='dot' color='warning'> */}
+                                        <BookmarkBorderOutlinedIcon /> 
+                                        <p>My Cart</p>
+                                    {/* </Badge> */}
                                 </div>
                             </Link>
                         </li>

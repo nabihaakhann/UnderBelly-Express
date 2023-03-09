@@ -84,18 +84,19 @@ ul{
   background: white;
   color: black;
   padding: 0.25rem;
-  padding-bottom: 0.85rem;
+  padding-bottom: 1rem; 
 }
 .image-card > img{
   height: 20rem;
   width: 100%;
   border-radius: 5px;
 }
-.image-card > div{
+.image-card > div:first-child{
   display: flex;
   justify-content: space-between;
   padding: 1rem;
 }
+
 .image-card p{
   align-self: start;
 }
@@ -618,7 +619,7 @@ transition: background-size 0.3s ease;
   background-color:#1e1e1e;
 } */
 
-.cart-total button {
+#place-order-button {
   padding: 1.5rem;
   margin-left: 1rem;
   color: #fff;
@@ -626,13 +627,14 @@ transition: background-size 0.3s ease;
   font-size: 1.2rem;
   width: 100%;
   cursor: pointer;
+  transition: all 0.2s ease-in;
 }
 
 /* hover effects  */
 
 
-.card-total button:hover {
-  background-color: #9f5909;
+#place-order-button:hover {
+  background-color: #eb8613;
 }
 
 .card-total .clear-cart {

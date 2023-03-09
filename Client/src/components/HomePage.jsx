@@ -10,7 +10,7 @@ export default function HomePage(){
     const {userId} = useParams();
 
     useEffect(()=>{
-        document.title = 'UnderBelly Express | Categories';
+        document.title = 'UnderBelly Express | Categories'; 
     }, [])
 
     return(

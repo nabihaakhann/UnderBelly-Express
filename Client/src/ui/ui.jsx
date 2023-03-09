@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../index.css';
 
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { grey, orange } from '@mui/material/colors';
-import { IconButton, CircularProgress } from '@mui/material';
+import { IconButton, CircularProgress, Button as MuiButton } from '@mui/material';
 
 const Colors = {
     primaryColor: '#E4905C', 
@@ -129,11 +129,44 @@ export function Loader({textColor}){
 }
 
 export function ImageCard({itemData, displayEditOptions, handleEditItemDetails}){
+    const [itemAdded, setItemAdded] = useState();
+
+    // Check whether Item already added to Cart or not
+    useEffect(()=>{
+        if(localStorage.getItem('cart')){
+            const cartItems = JSON.parse(localStorage.getItem('cart'));
+
+            cartItems.forEach(item => {
+                if(item._id === itemData._id){
+                    setItemAdded(true);
+                }
+            })
+        }
+    },[])
+
+    // Styling Object
     const editOptionsStyle = {
         color: grey[500],
         '&:hover': {
             color: orange[800]
         }
+    }
+    
+    function addItemButtonPress(){
+        setItemAdded(true);
+
+        // Push Item to cart 
+        const cartItems = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+
+        cartItems.push({
+            imageType: itemData.imageType, 
+            itemImage: itemData.itemImage, 
+            name: itemData.name, 
+            price: itemData.price, 
+            quantity: 1, 
+            _id: itemData._id
+        })
+        localStorage.setItem('cart', JSON.stringify(cartItems));
     }
 
     function onDeleteButtonPress(){
@@ -164,22 +197,31 @@ export function ImageCard({itemData, displayEditOptions, handleEditItemDetails})
                 <p style={{color: Colors.primaryColor, marginTop: '0.5rem'}}>Rs {itemData.price} </p>
                 <p>{itemData.description}</p>
 
-                {
-                    displayEditOptions && 
-                    <div style={{alignSelf: 'end'}}>
-                        <IconButton onClick={onEditButtonPress}>
-                            <EditIcon 
-                                sx={editOptionsStyle}
-                            />
-                        </IconButton>
-                        <IconButton onClick={onDeleteButtonPress}>
-                            <DeleteIcon 
-                                sx={editOptionsStyle}
-                            />
-                        </IconButton>
-                    </div>
-                }
             </div>
+            {
+                !displayEditOptions ? 
+                <div style={{alignSelf: 'end', justifySelf: 'end', marginTop: '1rem', marginRight: '1rem'}}>
+                    <MuiButton 
+                        variant='outlined'
+                        color='warning'
+                        onClick={addItemButtonPress}
+                        disabled={itemAdded}
+                    >Add</MuiButton>
+                </div>
+                :
+                <div style={{alignSelf: 'end'}}>
+                    <IconButton onClick={onEditButtonPress}>
+                        <EditIcon 
+                            sx={editOptionsStyle}
+                        />
+                    </IconButton>
+                    <IconButton onClick={onDeleteButtonPress}>
+                        <DeleteIcon 
+                            sx={editOptionsStyle}
+                        />
+                    </IconButton>
+                </div>
+            }
         </div>
     )
 }

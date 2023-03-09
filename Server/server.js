@@ -95,6 +95,7 @@ app.get('/categories/:category', (req, res)=>{
                         currentRating: item.currentRating,
                         filterTags: item.filterTags, 
                         itemImage: item.itemImage.toString('base64'), 
+                        imageType: item.imageType,
                         _id: item._id
                     }
                 })
