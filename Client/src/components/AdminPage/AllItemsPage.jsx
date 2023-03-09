@@ -7,6 +7,8 @@ export default function AllItemsPage(){
     const [loader, setLoader] = useState(true);
 
     useEffect(()=>{
+        document.title = 'UnderBelly Express | All Items'
+
         fetch('/allItems')
         .then(response => response.json())
         .then(response =>{
