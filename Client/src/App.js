@@ -5,7 +5,7 @@ import AdminPage from './components/AdminPage/AdminPage';
 import ErrorPage from './components/ErrorPage';
 import CategoryItems from './components/CategoryItems';
 import ContactPage from './components/Contacts';
-import CartPage from './components/Cart';
+import CartPage from './components/Cart/Cart';
 import AllItemsPage from './components/AdminPage/AllItemsPage';
 
 import {createBrowserRouter, RouterProvider, useParams} from 'react-router-dom';
