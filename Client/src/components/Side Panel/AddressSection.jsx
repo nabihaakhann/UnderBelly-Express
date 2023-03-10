@@ -19,6 +19,15 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
         setUserAddresses(userInfo.addresses);
     }, [userInfo.addresses])
 
+    // Save changes to User Address to Local Storage
+    useEffect(()=> {
+        const localUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+        localUserInfo.addresses = userAddresses;
+
+        localStorage.setItem('userInfo', JSON.stringify(localUserInfo));
+    }, [userAddresses])
+
     function setNewDefaultAddress(id){
         setUserAddresses(prevAddresses => {
             return (
@@ -120,7 +129,8 @@ export default function AddressSection({userId, userInfo, loadUserData, setAlert
         borderColor: grey[600], 
         border: '1px solid',
         borderRadius: '5px', 
-        padding: '1rem'
+        padding: '1rem',
+        width: '100%'
     }
 
     return (
