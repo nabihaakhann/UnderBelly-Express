@@ -1,16 +1,15 @@
 import Navbar from '../Navbar';
-// import '../index.css';   
 import { Heading } from "../../ui/ui";
 
 import React, { useEffect, useState } from "react";
-import {Link, useParams} from 'react-router-dom';
+import {Link, useParams, useNavigate} from 'react-router-dom';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddressSection from "../Side Panel/AddressSection";
 import CartItem from './CartItem';
 import CartFooter from './CartFooter';
 
 const CartPage=()=> {
     const {userId} = useParams();
+    const navigate = useNavigate();
 
     const [cartItems, setCartItems] = useState([]);
     
@@ -46,6 +45,36 @@ const CartPage=()=> {
 
         localStorage.setItem('cart', JSON.stringify(result));
         setCartItems(result);
+    }
+
+    function onPlacingOrder(totalAmount, address){
+        const orderObject = {
+            totalAmount: totalAmount, 
+            address: address, 
+            order: cartItems.map(item => {
+                return {
+                    name: item.name, 
+                    quantity: item.quantity, 
+                    itemId: item._id
+                }
+            })
+        }
+
+        fetch(`/${userId}/order`, {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(orderObject)
+        })
+        .then(response => response.json())
+        .then(response => {
+            if(response.success){
+                localStorage.setItem('cart', []);
+                console.log('Cart from Local Storage resetted');
+
+                navigate(`/${userId}/categories`);
+            }
+        })
+
     }
 
   return (
@@ -89,7 +118,10 @@ const CartPage=()=> {
                 </div>  
             </section>
 
-            <CartFooter items={cartItems}/>
+            <CartFooter 
+                items={cartItems}
+                onPlacingOrder={onPlacingOrder}
+            />
         </div>
     </>
     

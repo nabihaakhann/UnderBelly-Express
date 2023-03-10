@@ -40,8 +40,23 @@ const User = mongoose.model('User', {
     userImage: Buffer, 
     userImageType: String,
     userLevel: String,
-    itemsRated: [String]
+    itemsRated: [String],
+    previousOrders: [
+        {
+            order: [
+                {
+                    name: String,
+                    quantity: Number,
+                    itemId: String
+                }
+            ], 
+            totalAmount: Number, 
+            status: String
+        }
+    ]
 })
+
+// Menu-Items
 const Product = mongoose.model('Product', {
     category: String, 
     items: [
@@ -63,11 +78,26 @@ const Product = mongoose.model('Product', {
     ]
 })
 
-//contact form
+//Contact Queries
 const Contact = mongoose.model('contact-queries', {
     name: String, 
     message: String,
     email: String
+})
+
+// Placed Orders
+const Order = mongoose.model('order', {
+    userId: String, 
+    order: [
+        {
+            name: String, 
+            quantity: Number,
+            itemId: String
+        }
+    ], 
+    totalAmount: Number, 
+    status: String, 
+    address: String
 })
 
 // GET REQUESTS
@@ -447,6 +477,34 @@ app.post('/addNewAddress', (req, res)=>{
                     message: 'Address Saved in DB'
                 })
             }
+        }
+    })
+})
+
+app.post('/:userId/order', (req, res)=>{
+    console.log(req.body, req.params);
+
+    const orderObject = {
+        userId: req.params.userId, 
+        totalAmount: req.body.totalAmount, 
+        address: req.body.address,
+        order: req.body.order, 
+        status: 'completed'
+    }
+
+    // Save to Orders Collections
+    const newOrder = new Order(orderObject)
+    newOrder.save((err)=>{
+        if(!err){
+            console.log(`Order by ${req.params.userId} successfully saved in DB`);
+        }
+    })
+
+    // Save to order history for the user
+    User.findByIdAndUpdate(req.params.userId, {$push: {previousOrders: orderObject}}, (err)=> {
+        if(!err){
+            console.log('Order successfully saved to order history for User: ' + req.params.userId);
+            res.json({success: true});
         }
     })
 })

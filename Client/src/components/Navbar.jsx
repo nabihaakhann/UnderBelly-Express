@@ -15,7 +15,12 @@ export default function Navbar(){
     const [showSidePanel, setSidePanel] = useState(false);
 
     useLayoutEffect(()=>{
-        loadUserData();
+        if(!localStorage.getItem('userInfo')){
+            loadUserData();
+        }
+        else{
+            setUserInfo(JSON.parse(localStorage.getItem('userInfo')));
+        }
     }, [])
 
     function handleSearchChange(key, value){
@@ -41,8 +46,8 @@ export default function Navbar(){
     async function loadUserData(){
         const response = await fetch(`/${userId}/userData`);
         const data = await response.json();
-        // console.log(data.userData);
         setUserInfo(data.userData);
+        localStorage.setItem('userInfo', JSON.stringify(data.userData));
     }
 
     function displaySidePanel(){

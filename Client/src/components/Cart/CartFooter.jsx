@@ -1,6 +1,6 @@
 import { Divider } from "../../ui/ui"
 
-export default function CartFooter({items}){
+export default function CartFooter({items, onPlacingOrder}){
     const subtotal = function(){
         let sum = 0;
         items.forEach(item => {
@@ -11,13 +11,20 @@ export default function CartFooter({items}){
     }();
     const tax = Math.ceil(0.18 * subtotal), totalAmount = tax + subtotal;
 
+    const address = JSON.parse(localStorage.getItem('userInfo'))
+        .addresses.filter(address => address.default === true)[0].address;
+
+    console.log(address);
+
     return (
         <div id='cart-footer' >
-            <div className="cart-address">
+            <div id="cart-address">
                     <h3>Delivering To : </h3>
-                    <span>dfdfdf</span>
+                    <p>
+                        {address}
+                    </p>
             </div>
-            <div className="cart-total" style={{width:"100%", padding: '0 2rem'}}>
+            <div id="cart-total">
                 <div className="row-alignment" style={{margin: '1.5rem 0', paddingLeft: '1.2rem'}}>
                     <p>Cart SubTotal </p>
                     <p>Rs. {subtotal}</p>
@@ -36,7 +43,7 @@ export default function CartFooter({items}){
                 </div>
                 
                 <div>
-                    <button id="place-order-button">Place an Order!</button>    
+                    <button id="place-order-button" onClick={()=> onPlacingOrder(totalAmount, address)}>Place an Order!</button>    
                 </div>
             </div>
         </div>
